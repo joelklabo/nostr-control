@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { Plugin } from "cln-plugin-js";
+import Plugin from "cln-plugin-js";
 import NostrDMBot from "nostr-dm-bot";
 
 const bot_secret = "45e237f0a302a7f5835137716341d5bd9019a86342ed7bd5d57c6e4fde98a47d"
@@ -15,7 +15,7 @@ bot.on('connect', async (data) => {
 })
 
 bot.on('message', async (data) => {
-	let info = await plugin.rpc('getinfo', {})
+	let info = await plugin.rpc('getinfo')
 	await bot.publish(JSON.stringify(info))
 })
 
