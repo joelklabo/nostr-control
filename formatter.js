@@ -7,14 +7,18 @@ class Formatter {
 	//	"channel_ready": false
 
 	static channel_opened(info) {
-		return `🆕 ${info.funding_msat / 1000} sat channel opened with ${info.id}`;
+		return `🆕 ${info.funding_msat / 1000}⚡️ channel open 🆕
+		
+with ${info.id}`;
 	}
 
 	// Example of a channel_open_failed notification:
 	//	"channel_id": "a2d0851832f0e30a0cf778a826d72f077ca86b69f72677e0267f23f63a0599b"
 
 	static channel_open_failed(info) {
-		return `💔 channel open failed with: ${info.channel_id}`;
+		return `💔 channel open fail 💔
+
+channel id ${info.channel_id}`;
 	}
 
 	// Example of a channel_state_changed notification:
@@ -28,7 +32,10 @@ class Formatter {
 	//	"message" : "Peer closes channel"
 
 	static channel_state_changed(info) {
-		return `🍃 channel state changed with peer: ${info.peer_id} ${info.old_state} -> ${info.new_state}`;
+		return `🍃 channel state changed 🍃
+
+peer ${info.peer_id}
+${info.old_state} -> ${info.new_state}`;
 	}
 
 	// Example of a connect notification:
@@ -37,31 +44,42 @@ class Formatter {
 	//	"address": "
 
 	static connect(info) {
-		return `🤝 connected to peer: ${info.id} direction ${info.direction}`;
+		console.error(info)
+		return `🤝 connected 🤝
+
+${info.id} direction ${info.direction}`;
 	}
 
 	// Example of a disconnect notification:
 	//	"id": "02f6725f9c1c40333b67faea92fd211c183050f28df32cac3f9d69685fe9665432"
 
 	static disconnect(info) {
-		return `👋 disconnected from peer: ${info.id}`;
+		return `👋 disconnected 👋
+
+${info.id}`;
 	}
 
 	// Example of a invoice_payment notification:
 	//	"label": "unique-label-for-invoice",
 	//	"preimage": "0000000000000000000000000000000000000000000000000000000000000000",
-	//	"amount_msat": 10000
+	//	"msat": 10000msat
 	static invoice_payment(info) {
-		return `🧾 ${info.amount_msat / 1000} sat paid for ${info.label}`;
+		return `🧾 payment 🧾
+
+${parseInt(info.msat.replace('msat', '')) / 1000}⚡️
+for ${info.label}`;
 	}
 
 	// Example of a invoice_creation notification:		
 	//	"label": "unique-label-for-invoice",
 	//	"preimage": "0000000000000000000000000000000000000000000000000000000000000000",
-	//  "amount_msat": 10000,
+	//  "msat": 10000msat
 
 	static invoice_creation(info) {
-		return `💸 ${info.amount_msat / 1000} sat invoice created for ${info.label}`;
+		return `💸 invoice created 💸
+
+${parseInt(info.msat.replace('msat', '')) / 1000}⚡️ 
+for ${info.label}`;
 	}
 
 	// Example of a warning notification:
@@ -71,7 +89,9 @@ class Formatter {
 	//	"log": "Peer permanent failure in CHANNELD_NORMAL: lightning_channeld: sent ERROR bad reestablish dataloss msg"
 
 	static warning(info) {
-		return `🚨 warning: ${info.log}`;
+		return `🚨 warning 🚨
+
+${info.log}`;
 	}
 
 	// Example of a forward_event notification:
@@ -86,7 +106,10 @@ class Formatter {
 	//	"resolved_time": 1560696342.556
 
 	static forward_event(info) {
-		return `🔀 ${Math.round(info.out_msat / 1000)} sat to ${info.out_channel} from ${info.in_channel} for a fee of ${Math.round(info.fee_msat / 1000)} sat`;
+		return `🔀 ${Math.round(info.out_msat / 1000)}⚡️ 🔀
+
+to ${info.out_channel} from ${info.in_channel}
+fee ${Math.round(info.fee_msat / 1000)}⚡️`;
 	}
 
 	// Example of a sendpay_success notification:
@@ -100,7 +123,11 @@ class Formatter {
 	//	"payment_preimage": "9540d98095fd7f37687ebb7759e733934234d4f934e34433d4998a37de3733ee"
 
 	static sendpay_success(info) {
-		return `👍 payment of ${Math.round(info.amount_msat / 1000)} sat to ${info.destination} succeeded`;
+		console.error(info);
+		return `👍 payment succeeded 👍 
+
+${Math.round(info.amount_msat / 1000)}⚡️
+to ${info.destination}`;
 	}
 
 	// Example of a sendpay_failure notification:
@@ -123,7 +150,9 @@ class Formatter {
 	//	}
 
 	static sendpay_failure(info) {
-		return `👎 payment failed to ${info.data.destination} ${info.message}`;
+		return `👎 payment failed 👎
+
+${info.data.destination} ${info.message}`;
 	}
 
 	// Example of a coin_movement notification:
@@ -148,7 +177,10 @@ class Formatter {
 	//	"coin_type":"bc"
 
 	static coin_movement(info) {
-		return `🪙 ${info.type} credit: ${Math.round(info.credit_msat / 1000)} sat, debit: ${Math.round(info.debit_msat / 1000)} sat`;
+		return `🪙 ${info.type} 🪙
+
+credit: ${Math.round(info.credit_msat / 1000)}⚡️
+debit: ${Math.round(info.debit_msat / 1000)}⚡️`;
 	}
 
 	// Example of a balance_snapshot (too complex for now):
@@ -162,7 +194,10 @@ class Formatter {
 	//	"height": 753304
 
 	static block(info) {
-		return `🧱 ${info.height} ${info.hash}`;
+		return `🧱 new block 🧱
+
+height: ${info.height}
+hash: ${info.hash}`;
 	}
 
 	// Example of open_channel_peer_sigs notification:
@@ -170,7 +205,8 @@ class Formatter {
 	//	"signed_psbt": "cHNidP8BAKgCAAAAAQ+y+61AQAAAAD9////AzbkHAAAAAAAFgAUwsyrFxwqW+natS7EG4JYYwJMVGZQwwAAAAAAACIAIKYE2s4YZ+RON6BB5lYQESHR9cA7hDm6/maYtTzSLA0hUMMAAAAAAAAiACBbjNO5FM9nzdj6YnPJMDU902R2c0+9liECwt9TuQiAzWYAAAAAAQDfAgAAAAABARtaSZufCbC+P+/G23XVaQ8mDwZQFW1vlCsCYhLbmVrpAAAAAAD+////AvJs5ykBAAAAFgAUT6ORgb3CgFsbwSOzNLzF7jQS5s+AhB4AAAAAABepFNi369DMyAJmqX2agouvGHcDKsZkhwJHMEQCIHELIyqrqlwRjyzquEPvqiorzL2hrvdu9EBxsqppeIKiAiBykC6De/PDElnqWw49y2vTqauSJIVBgGtSc+vq5BQd+gEhAg0f8WITWvA8o4grxNKfgdrNDncqreMLeRFiteUlne+GZQAAAAEBIICEHgAAAAAAF6kU2Lfr0MzIAmapfZqCi68YdwMqxmSHAQcXFgAUAfrZCrzWZpfiWSFkci3kqV6+4WUBCGsCRzBEAiBF31wbNWECsJ0DrPel2inWla2hYpCgaxeVgPAvFEOT2AIgWiFWN0hvUaK6kEnXhED50wQ2fBqnobsRhoy1iDDKXE0BIQPXRURck2JmXyLg2W6edm8nPzJg3qOcina/oF3SaE3czwz8CWxpZ2h0bmluZwEIexhVcpJl8ugM/AlsaWdodG5pbmcCAgABAAz8CWxpZ2h0bmluZwEIR7FutlQgkSoADPwJbGlnaHRuaW5nAQhYT+HjxFBqeAAM/AlsaWdodG5pbmcBCOpQ5iiTTNQEAA=="
 
 	static openchannel_peer_sigs(info) {
-		return `✍️ open channel peer sigs ${info.channel_id}`;
+		return `✍️ open channel peer sigs
+${info.channel_id}`;
 	}
 
 	// Example of shutdown notification:
@@ -181,4 +217,4 @@ class Formatter {
 
 }
 
-module.exports = Formatter;
+export default Formatter;

@@ -42,14 +42,14 @@ class SubscriptionFixtures {
 	{
 		"label": "unique-label-for-invoice",
 		"preimage": "0000000000000000000000000000000000000000000000000000000000000000",
-		"amount_msat": 10000
+		"msat": '10000msat'
 	}
 
 	static invoice_creation =
 	{
 		"label": "unique-label-for-invoice",
 		"preimage": "0000000000000000000000000000000000000000000000000000000000000000",
-		"amount_msat": 10000
+		"msat": '10000msat'
 	}
 
 	static warning =

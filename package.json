@@ -2,10 +2,9 @@
   "name": "nostr-control",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "main.js",
   "type": "module",
   "scripts": {
-    "test": "jest --silent=false"
   },
   "keywords": [],
   "author": "",
@@ -13,8 +12,5 @@
   "dependencies": {
     "cln-plugin-js": "^1.0.0",
     "nostr-dm-bot": "^1.0.0"
-  },
-  "devDependencies": {
-    "jest": "^29.5.0"
   }
 }
