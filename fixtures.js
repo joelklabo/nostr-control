@@ -2,21 +2,16 @@ class SubscriptionFixtures {
 
 	// Taken from docs: https://docs.corelightning.org/docs/event-notifications
 
-	static channel_opened = 
-	{
-		"channel_opened": {
-			"id": "03864ef025fde8fb587d989186ce6a4a186895ee44a926bfc370e2c366597a3f8f",
-			"funding_msat": 100000000,
-			"funding_txid": "4a5e1e4baab89f3a32518a88c31bc87f618f76673e2cc77ab2127b7afdeda33b",
-			"channel_ready": false
-		}
+	static channel_opened = {
+		"id": "03864ef025fde8fb587d989186ce6a4a186895ee44a926bfc370e2c366597a3f8f",
+		"funding_msat": 100000000,
+		"funding_txid": "4a5e1e4baab89f3a32518a88c31bc87f618f76673e2cc77ab2127b7afdeda33b",
+		"channel_ready": false
 	}
 
 	static channel_open_failed =
 	{
-		"channel_open_failed": {
-			"channel_id": "a2d0851832f0e30a0cf...",
-		}
+		"channel_id": "a2d0851832f0e30a0cf778a826d72f077ca86b69f72677e0267f23f63a0599b",
 	}
 
 	static channel_state_changed =
@@ -219,3 +214,5 @@ class SubscriptionFixtures {
 	static shutdown = {}
 
 }
+
+module.exports = SubscriptionFixtures
