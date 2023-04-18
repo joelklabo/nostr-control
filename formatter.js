@@ -3,3 +3,5 @@ class Formatter {
 		return 'Channel opened';
 	}
 }
+
+module.exports = Formatter;
