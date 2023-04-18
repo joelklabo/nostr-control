@@ -5,7 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "keywords": [],
   "author": "",
@@ -13,5 +13,8 @@
   "dependencies": {
     "cln-plugin-js": "^1.0.0",
     "nostr-dm-bot": "^1.0.0"
+  },
+  "devDependencies": {
+    "jest": "^29.5.0"
   }
 }
