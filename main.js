@@ -8,11 +8,6 @@ import MessageHandler from "./message-handler.js";
 
 const config = new ConfigReader('nostr-config.json').read()
 
-if (!config.relay || !config.bot_secret || !config.your_pubkey) {
-	console.error('missing relay, bot_secret or your_pubkey')
-	process.exit(1)
-}
-
 const plugin = new Plugin({ dynamic: true })
 const bot = new NostrDMBot(config.relay, config.bot_secret, config.your_pubkey)
 const messageHandler = new MessageHandler()
