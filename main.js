@@ -4,22 +4,43 @@ import Plugin from "cln-plugin-js";
 import NostrDMBot from "nostr-dm-bot";
 import Formatter from "./formatter.js";
 import ConfigReader from "./config-reader.js";
+import MessageHandler from "./message-handler.js";
 
 const config = new ConfigReader('nostr-config.json').read()
 
 const plugin = new Plugin({ dynamic: true })
 const bot = new NostrDMBot(config.relay, config.bot_secret, config.your_pubkey)
+const messageHandler = new MessageHandler()
+
+// Bot
 
 bot.on('connect', async (data) => {
 	await bot.publish('👍 connected')
 })
 
-bot.on('message', async (data) => {
-	//let info = await plugin.rpc('getinfo')
-	//await bot.publish(JSON.stringify(info))
+bot.on('message', async (message) => {
+	messageHandler.handle(message)
 })
 
 await bot.connect()
+
+// Message Handler
+
+messageHandler.on('help', async () => {
+	await bot.publish('🤖 help')
+})
+
+messageHandler.on('info', async () => {
+	await bot.publish('🤖 info')
+})
+
+messageHandler.on('invoice', async (args) => {
+	const msat_amount = parseInt(args[0]) * 1000
+	const label = args[1]
+	const description = args[2]
+	const invoice = await plugin.call('invoice', { msatoshi: msat_amount, label: label, description: description })
+	await bot.publish(`🤖 invoice: ${invoice}`)
+})
 
 // Subscriptions
 
