@@ -1,5 +1,91 @@
 class Formatter {
 
+	// System 
+
+	static help() {
+		return `🤖 nostr-control 🤖
+
+/help - show this help
+/info - show node info
+/invoice [amount_sats] [label] [description] - create an invoice
+/donate - tip me some ⚡️
+/issue - report an issue`
+	}
+
+	static unknown() {
+		return `🤖 unknown command 🤖
+
+type /help for a list of commands`
+	}
+
+	static issue() {
+		return `🤖 report an issue 🤖
+
+File an issue here: https://github.com/joelklabo/nostr-control/issues`
+	}
+
+	static donate() {
+		return `🤖 donate 🤖
+
+BTC ⛓️: bc1q4gahrs92m4fz6el39zk3zy546psgl3sndezz9l
+
+LN Address ⚡️: joel@klabo.blog
+
+Tips: https://klabo.blog/tip
+
+Follow me on Nostr: npub19a86gzxctwtz68l8zld2u9y2fjvyyj4juyx8m5geylssrmfj27eqs22ckt
+
+GitHub ⭐️: https://github.com/joelklabo/nostr-control`
+	}
+	
+	// RPC
+
+	// Example of getinfo response:
+	//	"id": "03955cdc9ba1949429cc235cd9d8022d74fecb555009762ebaac6afddc4ea69d18",
+	//	"alias": "HAPPYWAFFLE",
+	//	"color": "03955c",
+	//	"num_peers": 1,
+	//	"num_pending_channels": 0,
+	//	"num_active_channels": 2,
+	//	"num_inactive_channels": 0,
+	//	"address": [],
+	//	"binding": [
+	//		 {
+	//				"type": "ipv4",
+	//				"address": "127.0.0.1",
+	//				"port": 7171
+	//		 }
+	//	],
+	//	"version": "v22.11.1",
+	//	"blockheight": 563,
+	//	"network": "regtest",
+	//	"fees_collected_msat": 0,
+	//	"lightning-dir": "/tmp/l1-regtest/regtest",
+	//	"our_features": {
+	//		 "init": "08a000080269a2",
+	//		 "node": "88a000080269a2",
+	//		 "channel": "",
+	//		 "invoice": "02000000024100"
+	//	}	
+
+	static getinfo(info) {
+		return `🤖 node info 🤖
+${info.alias}
+ID: ${info.id}
+Address: ${info.id}@${info.binding[0].address}:${info.binding[0].port}
+Color: ${info.color}
+Peers: ${info.num_peers}
+Active channels: ${info.num_active_channels}
+Inactive channels: ${info.num_inactive_channels}
+Pending channels: ${info.num_pending_channels}
+Version: ${info.version}
+Blockheight: ${info.blockheight}
+Network: ${info.network}
+Fees collected: ${info.fees_collected_msat / 1000}⚡️`
+	}
+
+	// Notifications
+	
 	// Example of a channel_opened notification:
 	//	"id": "03864ef025fde8fb587d989186ce6a4a186895ee44a926bfc370e2c366597a3f8f",
 	//	"funding_msat": 100000000,
@@ -8,7 +94,7 @@ class Formatter {
 
 	static channel_opened(info) {
 		return `🆕 ${info.funding_msat / 1000}⚡️ channel open 🆕
-		
+
 with ${info.id}`;
 	}
 
@@ -44,7 +130,6 @@ ${info.old_state} -> ${info.new_state}`;
 	//	"address": "
 
 	static connect(info) {
-		console.error(info)
 		return `🤝 connected 🤝
 
 ${info.id} direction ${info.direction}`;

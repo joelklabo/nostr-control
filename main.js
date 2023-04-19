@@ -12,14 +12,24 @@ const plugin = new Plugin({ dynamic: true })
 const bot = new NostrDMBot(config.relay, config.bot_secret, config.your_pubkey)
 const messageHandler = new MessageHandler()
 
+let ready = false
+
 // Bot
 
 bot.on('connect', async (data) => {
-	await bot.publish('👍 connected')
+	await bot.publish('👍 connected to nostr-control 🤙')
+	await bot.publish(Formatter.help())
+
+	// Give the handler some time for old messages
+	setTimeout(async () => {
+		ready = true
+	}, 3000)
 })
 
 bot.on('message', async (message) => {
-	messageHandler.handle(message)
+	if (ready === true) {
+		messageHandler.handle(message)
+	}
 })
 
 await bot.connect()
@@ -27,19 +37,52 @@ await bot.connect()
 // Message Handler
 
 messageHandler.on('help', async () => {
-	await bot.publish('🤖 help')
+	const message = Formatter.help()
+	await bot.publish(message)
+})
+
+messageHandler.on('donate', async () => {
+	const message = Formatter.donate()
+	await bot.publish(message)
+})
+
+messageHandler.on('issue', async () => {
+	const message = Formatter.issue()
+	await bot.publish(message)
+})
+
+messageHandler.on('unknown', async () => {
+	const message = Formatter.unknown()
+	await bot.publish(message)
 })
 
 messageHandler.on('info', async () => {
-	await bot.publish('🤖 info')
+	const info = await plugin.rpc('getinfo').catch((error) => {
+		messageHandler.emit('error', error)
+	})
+	if (info === undefined) return
+
+	const message = Formatter.getinfo(info)
+
+	await bot.publish(message)
 })
 
 messageHandler.on('invoice', async (args) => {
 	const msat_amount = parseInt(args[0]) * 1000
 	const label = args[1]
 	const description = args[2]
-	const invoice = await plugin.call('invoice', { msatoshi: msat_amount, label: label, description: description })
-	await bot.publish(`🤖 invoice: ${invoice}`)
+
+	const invoice = await plugin.rpc('invoice', { amount_msat: msat_amount, label: label, description: description }).catch((error) => {
+		messageHandler.emit('error', error)
+	})
+
+	if (invoice === undefined) return
+
+	await bot.publish(`${invoice.bolt11}`)
+})
+
+messageHandler.on('error', async (error) => {
+	await bot.publish(`🤖 error: ${JSON.stringify(error)}`)
 })
 
 // Subscriptions
