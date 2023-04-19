@@ -40,7 +40,7 @@ nostr-control uses Node.js and npm. You can install them from [here](https://nod
 
 1. Clone the repo into your plugins directory
 2. Run `npm install` in the nostr-control directory
-3. Create a config file, or put settings in lightning config (see below)
+3. Set up a config file (`config.json`) in this project's directory (see below)
 4. Register the plugin with lightningd (https://docs.corelightning.org/docs/a-day-in-the-life-of-a-plugin)
 
 ## Config File
@@ -50,12 +50,14 @@ nostr-control needs some Nostr information to work. Specifically these items:
 - `bot_secret` - The account that will be sending you DMs
 - `your_pubkey` - Your pubkey so you will receive the events
 
-You can put these in the lightning config file like this:
+There is an example config in the root directory `example-config.json` it looks like this. Input your information there and nostr-control will pick it up.
 
-```bash
-relay=wss://nostr.klabo.blog
-bot_secret=your_bot_secret (hex version)
-your_pubkey=your_pubkey (hex version)
+```javscript
+{
+	"relay": "some_relay",
+	"bot_secret": "some_secret_key_hex",
+	"your_pubkey": "your_pub_key_hex"
+}
 ```
 
 nostr-control also keeps track of it's own settings so you can update things on the fly. Where that file is stored depends on your environment. When running on `regtest` mine was stored here: `/tmp/l1-regtest/regtest/nostr-config.json` 

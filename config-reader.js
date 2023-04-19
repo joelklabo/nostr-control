@@ -1,10 +1,14 @@
 import fs from 'fs';
 import path from 'path';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
 
 class ConfigReader {
 
 	constructor(filePath) {
-		this.path = path.join(process.cwd(), filePath)
+		const __filename = fileURLToPath(import.meta.url);
+		const __dirname = dirname(__filename);	
+		this.path = path.join(__dirname, filePath)
 	}
 
 	read() {

@@ -6,7 +6,7 @@ import Formatter from "./formatter.js";
 import ConfigReader from "./config-reader.js";
 import MessageHandler from "./message-handler.js";
 
-const config = new ConfigReader('nostr-config.json').read()
+const config = new ConfigReader('config.json').read()
 
 const plugin = new Plugin({ dynamic: true })
 const bot = new NostrDMBot(config.relay, config.bot_secret, config.your_pubkey)

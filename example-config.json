@@ -1,0 +1,5 @@
+{
+	"relay": "some_relay",
+	"bot_secret": "some_secret_key_hex",
+	"your_pubkey": "your_pub_key_hex"
+}
