@@ -42,8 +42,6 @@ bot.on('message', async (message) => {
 	}
 })
 
-await bot.connect()
-
 // Message Handler
 
 messageHandler.on('help', async () => {
@@ -172,6 +170,10 @@ plugin.subscribe("shutdown", async (data) => {
 	const message = Formatter.shutdown(data)
 	await bot.publish(message)
 })
+
+
+log('calling connect on bot')
+await bot.connect()
 
 log('calling start')
 plugin.start()
