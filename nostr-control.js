@@ -23,8 +23,6 @@ let ready = false
 
 // Bot
 
-await bot.connect()
-
 bot.on('connect', async (data) => {
 	log('connected to relay')
 
@@ -43,6 +41,8 @@ bot.on('message', async (message) => {
 		messageHandler.handle(message)
 	}
 })
+
+await bot.connect()
 
 // Message Handler
 
