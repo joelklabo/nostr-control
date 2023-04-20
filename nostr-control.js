@@ -17,6 +17,7 @@ const messageHandler = new MessageHandler()
 
 async function init(plugin) {
 	log('initialized callback called')
+	return true
 }
 
 let ready = false
