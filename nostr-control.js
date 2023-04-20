@@ -5,20 +5,15 @@ import NostrDMBot from "nostr-dm-bot";
 import Formatter from "./formatter.js";
 import ConfigReader from "./config-reader.js";
 import MessageHandler from "./message-handler.js";
-import log from "./logger.js";
+import { log, pluginLog } from "./logger.js";
 
 log('file loaded')
 
 const config = new ConfigReader('config.json').read()
 
-const plugin = new Plugin({ dynamic: true }, init)
+const plugin = new Plugin({ dynamic: true }, pluginLog)
 const bot = new NostrDMBot(config.relay, config.bot_secret, config.your_pubkey)
 const messageHandler = new MessageHandler()
-
-async function init(plugin) {
-	log('initialized callback called')
-	return true
-}
 
 let ready = false
 
@@ -37,7 +32,7 @@ bot.on('connect', async (data) => {
 })
 
 bot.on('message', async (message) => {
-	log('message received:' + message)
+	log('message received: ' + message)
 	if (ready === true) {
 		messageHandler.handle(message)
 	}

@@ -6,8 +6,8 @@ import { dirname } from 'path';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-function log(text) {
-  const tempFilePath = path.join(__dirname, 'log.txt');
+export function log(text) {
+  const tempFilePath = path.join(__dirname, 'debug.log');
 
   const message = "[nstrctrl] " + text;
 
@@ -24,4 +24,6 @@ function log(text) {
   }
 }
 
-export default log
+export function pluginLog(text) {
+  log("[plugin] " + text)
+}
