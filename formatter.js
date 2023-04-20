@@ -8,6 +8,7 @@ class Formatter {
 /help - show this help
 /info - show node info
 /invoice [amount_sats] [label] [description] - create an invoice
+/address - get a new address (Bech32)
 /donate - tip me some ⚡️
 /issue - report an issue`
 	}

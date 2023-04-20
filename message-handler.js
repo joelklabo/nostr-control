@@ -26,6 +26,9 @@ class MessageHandler extends EventEmitter {
 						this.emit('invoice', args)
 						break
 					}
+				case 'address':
+					this.emit('address')
+					break
 				case 'donate':
 					this.emit('donate')
 					break

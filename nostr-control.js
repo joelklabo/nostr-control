@@ -93,14 +93,25 @@ messageHandler.on('invoice', async (args) => {
 	const label = args[1]
 	const description = args[2]
 
-	const invoice = await plugin.rpc('invoice', { amount_msat: msat_amount, label: label, description: description }).catch((error) => {
+	const result = await plugin.rpc('invoice', { amount_msat: msat_amount, label: label, description: description }).catch((error) => {
 		messageHandler.emit('error', error)
 	})
 
-	if (invoice === undefined) return
+	if (result === undefined) return
 
-	await bot.publish(`${invoice.bolt11}`)
+	await bot.publish(`${result.bolt11}`)
 })
+
+messageHandler.on('address', async () => {
+	const result = await plugin.rpc('newaddr').catch((error) => {
+		messageHandler.emit('error', error)
+	})
+
+	if (result === undefined) return
+
+	await bot.publish(`${result.bech32}`)
+})
+
 
 messageHandler.on('error', async (error) => {
 	await bot.publish(`🤖 error: ${JSON.stringify(error)}`)
