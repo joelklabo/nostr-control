@@ -8,9 +8,13 @@ import MessageHandler from "./message-handler.js";
 
 const config = new ConfigReader('config.json').read()
 
-const plugin = new Plugin({ dynamic: true })
+const plugin = new Plugin({ dynamic: true }, init)
 const bot = new NostrDMBot(config.relay, config.bot_secret, config.your_pubkey)
 const messageHandler = new MessageHandler()
+
+async function init(plugin) {
+	await bot.connect()
+}
 
 let ready = false
 
@@ -32,7 +36,6 @@ bot.on('message', async (message) => {
 	}
 })
 
-await bot.connect()
 
 // Message Handler
 
