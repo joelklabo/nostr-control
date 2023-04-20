@@ -6,6 +6,13 @@ import Formatter from "./formatter.js";
 import ConfigReader from "./config-reader.js";
 import MessageHandler from "./message-handler.js";
 
+let crypto;
+try {
+  crypto = await import('node:crypto');
+} catch (err) {
+  console.error('crypto support is disabled!');
+} 
+
 const config = new ConfigReader('config.json').read()
 
 const plugin = new Plugin({ dynamic: true })
