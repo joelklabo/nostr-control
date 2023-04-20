@@ -1,4 +1,4 @@
-import EventEmitter from 'events'
+const EventEmitter = require('events');
 
 class MessageHandler extends EventEmitter {
 	constructor() {
@@ -42,5 +42,4 @@ class MessageHandler extends EventEmitter {
 	}
 }
 
-
-export default MessageHandler
+module.exports = MessageHandler;

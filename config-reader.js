@@ -1,7 +1,8 @@
-import fs from 'fs';
-import path from 'path';
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
+const fs = require('fs');
+const path = require('path');
+const { fileURLToPath } = require('url');
+const { dirname } = require('path');
+
 
 class ConfigReader {
 
@@ -31,4 +32,4 @@ class ConfigReader {
 	}
 }
 
-export default ConfigReader
+module.exports = ConfigReader;

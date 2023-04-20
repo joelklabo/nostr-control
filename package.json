@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "",
   "main": "main.js",
-  "type": "module",
   "scripts": {
     "load": "lightning-cli plugin start $(pwd)/nostr-control.js"
   },

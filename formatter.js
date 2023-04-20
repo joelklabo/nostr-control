@@ -302,4 +302,4 @@ ${info.channel_id}`;
 
 }
 
-export default Formatter;
+module.exports = Formatter;
