@@ -36,7 +36,6 @@ bot.on('message', async (message) => {
 	}
 })
 
-
 // Message Handler
 
 messageHandler.on('help', async () => {
