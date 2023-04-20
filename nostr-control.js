@@ -17,15 +17,17 @@ const messageHandler = new MessageHandler()
 
 async function init(plugin) {
 	log('initialized callback called')
-	await bot.connect()
 }
 
 let ready = false
 
 // Bot
 
+await bot.connect()
+
 bot.on('connect', async (data) => {
 	log('connected to relay')
+
 	await bot.publish('👍 connected to nostr-control 🤙')
 	await bot.publish(Formatter.help())
 
