@@ -1,0 +1,17 @@
+{
+  "name": "nostr-dm-bot",
+  "version": "1.0.0",
+  "description": "A light wrapper around nostr-tools for creating a bot you can DM with",
+  "main": "nostr-dm-bot.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "joelklabo@gmail.com",
+  "license": "MIT",
+  "dependencies": {
+    "nostr-tools": "^1.8.4",
+    "websocket-polyfill": "^0.0.3"
+  }
+}

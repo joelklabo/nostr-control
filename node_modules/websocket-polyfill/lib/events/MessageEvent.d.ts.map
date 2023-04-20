@@ -1,0 +1,1 @@
+{"version":3,"file":"MessageEvent.d.ts","sourceRoot":"","sources":["../../src/events/MessageEvent.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,KAAK,EAAE,MAAM,SAAS,CAAC;AAEhC,qBAAa,YAAa,SAAQ,KAAK;IAEtC,SAAgB,IAAI,EAAE,GAAG,CAAC;gBAEP,IAAI,EAAE,MAAM,EAAE,IAAI,CAAC,EAAE,gBAAgB;CAIxD"}

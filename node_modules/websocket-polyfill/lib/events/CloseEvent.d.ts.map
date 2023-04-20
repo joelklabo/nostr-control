@@ -1,0 +1,1 @@
+{"version":3,"file":"CloseEvent.d.ts","sourceRoot":"","sources":["../../src/events/CloseEvent.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,KAAK,EAAE,MAAM,SAAS,CAAC;AAEhC,qBAAa,UAAW,SAAQ,KAAK;IAEpC,SAAgB,IAAI,EAAE,MAAM,CAAC;IAC7B,SAAgB,MAAM,EAAE,MAAM,CAAC;gBAEZ,IAAI,EAAE,MAAM,EAAE,IAAI,CAAC,EAAE,cAAc;CAItD"}

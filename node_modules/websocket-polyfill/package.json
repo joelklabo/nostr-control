@@ -1,0 +1,41 @@
+{
+  "name": "websocket-polyfill",
+  "description": "WebSocket class from Browser to NodeJS",
+  "author": {
+    "name": "Jeongho Nam",
+    "email": "samchon@samchon.org",
+    "url": "http://samchon.org"
+  },
+  "version": "0.0.3",
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "node lib/tests/main"
+  },
+  "dependencies": {
+    "tstl": "^2.0.7",
+    "websocket": "^1.0.28"
+  },
+  "devDependencies": {
+    "@types/node": "^10.11.4",
+    "@types/websocket": "0.0.40"
+  },
+  "homepage": "https://github.com/samchon/websocket-polyfill#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/samchon/websocket-polyfill.git"
+  },
+  "bugs": {
+    "url": "https://github.com/samchon/websocket-polyfill/issues"
+  },
+  "licenses": [
+    {
+      "type": "BSD 3-Clause",
+      "url": "https://opensource.org/licenses/BSD-3-Clause"
+    }
+  ],
+  "keywords": [
+    "WebSocket"
+  ]
+}

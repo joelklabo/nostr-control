@@ -1,0 +1,1 @@
+{"version":3,"file":"ErrorEvent.d.ts","sourceRoot":"","sources":["../../src/events/ErrorEvent.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,KAAK,EAAE,MAAM,SAAS,CAAC;AAEhC,qBAAa,UAAW,SAAQ,KAAK;IAEpC,SAAgB,KAAK,EAAE,GAAG,CAAC;IAC3B,SAAgB,OAAO,EAAE,MAAM,CAAC;gBAEb,IAAI,EAAE,MAAM,EAAE,IAAI,CAAC,EAAE,cAAc;CAItD"}
