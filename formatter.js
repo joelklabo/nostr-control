@@ -86,6 +86,16 @@ Fees collected: ${info.fees_collected_msat / 1000}⚡️`
 
 	// Notifications
 	
+	static message_for_notification(name, data) {
+		if (name == "connect" || name == "disconnect") {
+			return Formatter[name](data);
+		} else if (name == "block_added") {
+			return Formatter[name](data.block);
+		} else {
+			return Formatter[name](data[name]);
+		}
+	}
+
 	// Example of a channel_opened notification:
 	//	"id": "03864ef025fde8fb587d989186ce6a4a186895ee44a926bfc370e2c366597a3f8f",
 	//	"funding_msat": 100000000,
@@ -278,7 +288,7 @@ debit: ${Math.round(info.debit_msat / 1000)}⚡️`;
 	//	"hash": "000000000000000000034bdb3c01652a0aa8f63d32f949313d55af2509f9d245",
 	//	"height": 753304
 
-	static block(info) {
+	static block_added(info) {
 		return `🧱 new block 🧱
 
 height: ${info.height}

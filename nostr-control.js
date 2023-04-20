@@ -7,13 +7,29 @@ import ConfigReader from "./config-reader.js";
 import MessageHandler from "./message-handler.js";
 import { log, pluginLog } from "./logger.js";
 
-log('file loaded')
-
 const config = new ConfigReader('config.json').read()
 
 const plugin = new Plugin({ dynamic: true }, pluginLog)
 const bot = new NostrDMBot(config.relay, config.bot_secret, config.your_pubkey)
 const messageHandler = new MessageHandler()
+
+const allNotifications = [
+	`channel_opened`,
+	`channel_open_failed`,
+	`channel_state_changed`,
+	`connect`,
+	`disconnect`,
+	`invoice_payment`,
+	`invoice_creation`,
+	`forward_event`,
+	`sendpay_success`,
+	`sendpay_failure`,
+	`coin_movement`,
+	`balance_snapshot`,
+	`block_added`,
+	`openchannel_peer_sigs`,
+	`shutdown`
+]
 
 let ready = false
 
@@ -34,6 +50,7 @@ bot.on('connect', async (data) => {
 bot.on('message', async (message) => {
 	log('message received: ' + message)
 	if (ready === true) {
+		log('ready to handle messages')
 		messageHandler.handle(message)
 	}
 })
@@ -91,82 +108,15 @@ messageHandler.on('error', async (error) => {
 
 // Subscriptions
 
-plugin.subscribe("channel_opened", async (data) => {
-	const message = Formatter.channel_opened(data.channel_opened)
-	await bot.publish(message)
+allNotifications.forEach((notification) => {
+	log('subscribing to ' + notification)
+	plugin.subscribe(notification, async (data) => {
+		log('notification received: ' + notification)
+		const message = Formatter.message_for_notification(notification, data)
+		log('publishing message: \n' + message)
+		await bot.publish(message)
+	})
 })
-
-plugin.subscribe("channel_open_failed", async (data) => {
-	const message = Formatter.channel_open_failed(data.channel_open_failed)
-	await bot.publish(message)
-})
-
-plugin.subscribe("channel_state_changed", async (data) => {
-	const message = Formatter.channel_state_changed(data.channel_state_changed)
-	await bot.publish(message)
-})
-
-plugin.subscribe("connect", async (data) => {
-	const message = Formatter.connect(data)
-	await bot.publish(message)
-})
-
-plugin.subscribe("disconnect", async (data) => {
-	const message = Formatter.disconnect(data)
-	await bot.publish(message)
-})
-
-plugin.subscribe("invoice_payment", async (data) => {
-	const message = Formatter.invoice_payment(data)
-	await bot.publish(message)
-})
-
-plugin.subscribe("invoice_creation", async (data) => {
-	console.error(data)
-	const message = Formatter.invoice_creation(data.invoice_creation)
-	await bot.publish(message)
-})
-
-plugin.subscribe("forward_event", async (data) => {
-	const message = Formatter.forward_event(data.forward_event)
-	await bot.publish(message)
-})
-
-plugin.subscribe("sendpay_success", async (data) => {
-	const message = Formatter.sendpay_success(data.sendpay_success)
-	await bot.publish(message)
-})
-
-plugin.subscribe("sendpay_failure", async (data) => {
-	const message = Formatter.sendpay_failure(data.sendpay_failure)
-	await bot.publish(message)
-})
-
-plugin.subscribe("coin_movement", async (data) => {
-	const message = Formatter.coin_movement(data.coin_movement)
-	await bot.publish(message)
-})
-
-plugin.subscribe("balance_snapshot", async (data) => {
-	const message = Formatter.balance_snapshot(data.balance_snapshot)
-	await bot.publish(message)
-})
-
-plugin.subscribe("block_added", async (data) => {
-	const message = Formatter.block(data.block)
-	await bot.publish(message)
-})
-
-plugin.subscribe("openchannel_peer_sigs", async (data) => {
-	const message = Formatter.openchannel_peer_sigs(data.openchannel_peer_sigs)
-	await bot.publish(message)
-})
-
-plugin.subscribe("shutdown", async (data) => {
-	const message = Formatter.shutdown(data)
-	await bot.publish(message)
-})
-
 
 log('calling connect on bot')
 await bot.connect()
