@@ -4,12 +4,12 @@ import log from "./log.js";
 import path from "path";
 
 class Plugin {
-  constructor(options, initializedCallback) {
+  constructor(options, logger) {
     this.dynamic = options.dynamic || false;
     this.options = [];
     this.methods = [];
     this.subscriptions = {};
-    this.initializedCallback = initializedCallback;
+    this.logger = logger || log;
   }
 
   addOption = (key, type, description, default_value) => {
@@ -93,7 +93,8 @@ class Plugin {
   };
 
   handleMessage = async (message) => {
-    log(JSON.stringify(message));
+    this.logger('received message: \n');
+    this.logger(JSON.stringify(message));
     const id = message.id;
     const method = message.method;
     switch (method) {
@@ -105,19 +106,7 @@ class Plugin {
         const config = message.params.configuration;
         this.rpc_path = path.join(config["lightning-dir"], config["rpc-file"]);
         this.sendResponse(id, this.init);
-        await this.initializedCallback(this);
         break;
-      case "testinfo":
-        const info = await sendJsonRpcMessage(this.rpc_path, "getinfo", {});
-        this.cli_params = message.params;
-        this.sendResponse(id, info);
-      case "getchannels":
-        const channels = await sendJsonRpcMessage(
-          this.rpc_path,
-          "listchannels",
-          {}
-        );
-        this.sendResponse(id, channels);
     }
   };
 
@@ -127,7 +116,8 @@ class Plugin {
       id: id,
       result: result,
     };
-    log(JSON.stringify(response));
+    this.logger('sending response: \n');
+    this.logger(JSON.stringify(response));
     process.stdout.write(JSON.stringify(response) + "\n\n");
   };
 
