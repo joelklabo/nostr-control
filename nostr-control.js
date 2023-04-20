@@ -5,6 +5,7 @@ import NostrDMBot from "nostr-dm-bot";
 import Formatter from "./formatter.js";
 import ConfigReader from "./config-reader.js";
 import MessageHandler from "./message-handler.js";
+import log from "./log.js";
 
 const config = new ConfigReader('config.json').read()
 
@@ -13,6 +14,7 @@ const bot = new NostrDMBot(config.relay, config.bot_secret, config.your_pubkey)
 const messageHandler = new MessageHandler()
 
 async function init(plugin) {
+	log("initialized callback called")
 	await bot.connect()
 }
 
@@ -21,6 +23,7 @@ let ready = false
 // Bot
 
 bot.on('connect', async (data) => {
+	log("connected to relay")
 	await bot.publish('👍 connected to nostr-control 🤙')
 	await bot.publish(Formatter.help())
 
@@ -31,6 +34,7 @@ bot.on('connect', async (data) => {
 })
 
 bot.on('message', async (message) => {
+	log("message received")
 	if (ready === true) {
 		messageHandler.handle(message)
 	}
