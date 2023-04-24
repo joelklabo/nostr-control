@@ -2,6 +2,12 @@
 
 # nostr-control
 
+TODO:
+- [ ] Disable events
+- [ ] Only settled forwards
+- [ ] Routing summary
+- [ ] Channel summary
+
 ## Description
 
 nostr-control is a Core Lightning plugin that allows you talk to your node over Nostr DM. It also will send you events from your node over Nostr DMs.
@@ -41,10 +47,9 @@ Current commands:
 
 nostr-control uses Node.js and npm. You can install them from [here](https://nodejs.org/en/download/).
 
-1. Clone the repo into your plugins directory
-2. Run `npm install` in the nostr-control directory
-3. Set up a config file (`config.json`) in this project's directory (see below)
-4. Register the plugin with lightningd (https://docs.corelightning.org/docs/a-day-in-the-life-of-a-plugin)
+1. Clone the repo into your plugins directory (DO NOT RUN `npm install` packages are checked in and there is a modification needed for this to run.)
+2. Set up a config file (`config.json`) in this project's directory (see below)
+3. Register the plugin with lightningd (https://docs.corelightning.org/docs/a-day-in-the-life-of-a-plugin)
 
 ## Config File
 
