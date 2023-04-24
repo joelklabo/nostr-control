@@ -1,3 +1,5 @@
+[![Formatter Tests](https://github.com/joelklabo/nostr-control/actions/workflows/formatter-tests.yml/badge.svg)](https://github.com/joelklabo/nostr-control/actions/workflows/formatter-tests.yml)
+
 # nostr-control
 
 ## Description
