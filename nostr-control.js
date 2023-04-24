@@ -123,7 +123,7 @@ allNotifications.forEach((notification) => {
 	log('subscribing to ' + notification)
 	plugin.subscribe(notification, async (data) => {
 		log('notification received: ' + notification)
-		const message = Formatter.message_for_notification(notification, data)
+		const message = Formatter[notification](data)
 		log('publishing message: \n' + message)
 		await bot.publish(message)
 	})

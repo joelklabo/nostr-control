@@ -84,6 +84,9 @@ class Plugin {
         break;
       }
 
+      this.logger('received message:');
+      this.logger(JSON.stringify(message));
+
       if (this.subscriptions.hasOwnProperty(message.method)) {
         this.subscriptions[message.method](message.params);
       } else {
@@ -93,8 +96,6 @@ class Plugin {
   };
 
   handleMessage = async (message) => {
-    this.logger('received message: \n');
-    this.logger(JSON.stringify(message));
     const id = message.id;
     const method = message.method;
     switch (method) {
@@ -116,7 +117,7 @@ class Plugin {
       id: id,
       result: result,
     };
-    this.logger('sending response: \n');
+    this.logger('sending response:');
     this.logger(JSON.stringify(response));
     process.stdout.write(JSON.stringify(response) + "\n\n");
   };
