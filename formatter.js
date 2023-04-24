@@ -288,12 +288,14 @@ ${destination} ${message}`;
 
 	static coin_movement(data) {
 		const info = data.coin_movement
-		const credit = Math.round(info.credit_msat / 1000)
-		const debit = Math.round(info.debit_msat / 1000)
+		const credit_msat = parseInt(info.credit_msat.replace('msat', ''))
+		const credit_sat = Math.round(credit_msat / 1000)
+		const debit_msat = parseInt(info.debit_msat.replace('msat', ''))
+		const debit_sat = Math.round(debit_msat / 1000)
 		return `🪙 coin movement: ${info.type} 🪙
 
-credit: ${credit}⚡️
-debit: ${debit}⚡️`;
+credit: ${credit_sat}⚡️
+debit: ${debit_sat}⚡️`;
 	}
 
 	// Example of a balance_snapshot (too complex for now):

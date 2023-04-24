@@ -143,9 +143,9 @@ class SubscriptionFixtures {
       vout: 1, // (`chain_mvt` only)
       payment_hash: "xxx", // (either type, optional on both)
       part_id: 0, // (`channel_mvt` only, optional)
-      credit_msat: 2000000000,
-      debit_msat: 0,
-      output_msat: 2000000000, // ('chain_mvt' only)
+      credit_msat: "2000000000msat",
+      debit_msat: "0msat",
+      output_msat: "2000000000msat", // ('chain_mvt' only)
       output_count: 2, // ('chain_mvt' only, typically only channel closes)
       fees_msat: 382, // ('channel_mvt' only)
       tags: ["deposit"],
