@@ -70,10 +70,12 @@ GitHub ⭐️: https://github.com/joelklabo/nostr-control`
 	//	}	
 
 	static getinfo(info) {
+		const fee_msat = parseInt(info.fees_collected_msat.replace('msat', ''));
+		const fee_sats = Math.round(info.fees_collected_msat / 1000)
 		return `🤖 node info 🤖
 ${info.alias}
 ID: ${info.id}
-Address: ${info.id}@${info.binding[0].address}:${info.binding[0].port}
+Address: ${info.id}@${info.address[0].address}:${info.address[0].port}
 Color: ${info.color}
 Peers: ${info.num_peers}
 Active channels: ${info.num_active_channels}
@@ -82,7 +84,7 @@ Pending channels: ${info.num_pending_channels}
 Version: ${info.version}
 Blockheight: ${info.blockheight}
 Network: ${info.network}
-Fees collected: ${info.fees_collected_msat / 1000}⚡️`
+Fees collected: ${fee_sats} ⚡️`
 	}
 
 	// Example of a channel_opened notification:
@@ -204,10 +206,14 @@ ${info.log}`;
 
 	static forward_event(data) {
 		const info = data.forward_event
-		return `🔀 routed ${info.out_msat} milli ⚡️ 🔀
+		const out_msat = parseInt(info.out_msat.replace('msat', ''));
+		const out_sats = Math.round(out_msat / 1000);
+		const fee_msat = parseInt(info.fee_msat.replace('msat', ''));
+		const fee_sats = Math.round(fee_msat / 1000);
+		return `🔀 routed ${out_sats} ⚡️ 🔀
 
 to ${info.out_channel} from ${info.in_channel}
-fee ${info.fee_msat} milli ⚡️
+fee ${fee_sats} ⚡️
 status ${info.status}`;
 	}
 
@@ -215,8 +221,8 @@ status ${info.status}`;
 	//	"id": 1,
 	//	"payment_hash": "5c85bf402b87d4860f4a728e2e58a2418bda92cd7aea0ce494f11670cfbfb206",
 	//	"destination": "035d2b1192dfba134e10e540875d366ebc8bc353d5aa766b80c090b39c3a5d885d",
-	//	"amount_msat": 100000000,
-	//	"amount_sent_msat": 100001001,
+	//	"amount_msat": 100000000, (69590514msat)
+	//	"amount_sent_msat": 100001001, (69590514msat)
 	//	"created_at": 1561390572,
 	//	"status": "complete",
 	//	"payment_preimage": "9540d98095fd7f37687ebb7759e733934234d4f934e34433d4998a37de3733ee"

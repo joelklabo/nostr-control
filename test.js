@@ -58,13 +58,13 @@ test('invoice_creation', t => {
 
 test('forward_event', t => {
 	const message = Formatter.forward_event(SubscriptionFixtures.forward_event);
-	const out_msat = 10000
-	const fee_msat = 1
+	const out_sat = 10
+	const fee_sat = 0
 	const in_channel = '566x1x0'
 	const out_channel = '1092x1x0'
 	const status = 'settled'
-	t.regex(message, new RegExp(out_msat));
-	t.regex(message, new RegExp(fee_msat));
+	t.regex(message, new RegExp(out_sat));
+	t.regex(message, new RegExp(fee_sat));
 	t.regex(message, new RegExp(in_channel));
 	t.regex(message, new RegExp(out_channel));
 	t.regex(message, new RegExp(status));
