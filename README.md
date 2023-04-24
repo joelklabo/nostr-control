@@ -12,6 +12,10 @@ TODO:
 
 nostr-control is a Core Lightning plugin that allows you talk to your node over Nostr DM. It also will send you events from your node over Nostr DMs.
 
+| Info | Create Invoice | Get Address | See Forwards | New Blocks (etc.) |
+| - | - | - | - | - |
+|![IMG_2262](https://user-images.githubusercontent.com/264977/234135277-075c3a99-510c-4b39-a643-17421e5af100.PNG)|![IMG_2258](https://user-images.githubusercontent.com/264977/234135152-7debd1ea-4f73-4d1e-9a07-1f80b3335d8b.PNG) |![IMG_2261](https://user-images.githubusercontent.com/264977/234135150-16d2f2b9-11c5-44e6-ab3f-dd7e61017800.PNG) |![IMG_2260](https://user-images.githubusercontent.com/264977/234135151-65ba672f-0d6d-4050-a55f-2c14c13c3a57.PNG) |![IMG_2258](https://user-images.githubusercontent.com/264977/234135155-51e7810b-f548-4bcc-ac21-e962cf1a331c.PNG) |
+
 ## What can I do with it?
 
 When you first set up nostr-control you will start recieving DMs from your node about events that are happening. By default you will receive all events, but you can change this in the config file.
