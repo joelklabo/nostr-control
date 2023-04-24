@@ -233,12 +233,14 @@ status ${info.status}`;
 	//	"status": "complete",
 	//	"payment_preimage": "9540d98095fd7f37687ebb7759e733934234d4f934e34433d4998a37de3733ee"
 
-	static sendpay_success(info) {
-		console.error(info);
+	static sendpay_success(data) {
+		const info = data.sendpay_success 
+		const destination = info.destination
+		const sats = info.amount_msat / 1000
 		return `👍 payment succeeded 👍 
 
-${Math.round(info.amount_msat / 1000)}⚡️
-to ${info.destination}`;
+${Math.round(sats)}⚡️
+to ${destination}`;
 	}
 
 	// Example of a sendpay_failure notification:
@@ -260,10 +262,13 @@ to ${info.destination}`;
 	//		"erring_direction": 0
 	//	}
 
-	static sendpay_failure(info) {
+	static sendpay_failure(data) {
+		const info = data.sendpay_failure
+		const destination = info.data.destination
+		const message = info.message
 		return `👎 payment failed 👎
 
-${info.data.destination} ${info.message}`;
+${destination} ${message}`;
 	}
 
 	// Example of a coin_movement notification:
@@ -287,11 +292,14 @@ ${info.data.destination} ${info.message}`;
 	//	"timestamp":1585948198,
 	//	"coin_type":"bc"
 
-	static coin_movement(info) {
-		return `🪙 ${info.type} 🪙
+	static coin_movement(data) {
+		const info = data.coin_movement
+		const credit = Math.round(info.credit_msat / 1000)
+		const debit = Math.round(info.debit_msat / 1000)
+		return `🪙 coin movement: ${info.type} 🪙
 
-credit: ${Math.round(info.credit_msat / 1000)}⚡️
-debit: ${Math.round(info.debit_msat / 1000)}⚡️`;
+credit: ${credit}⚡️
+debit: ${debit}⚡️`;
 	}
 
 	// Example of a balance_snapshot (too complex for now):

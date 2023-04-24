@@ -69,3 +69,29 @@ test('forward_event', t => {
 	t.regex(message, new RegExp(out_channel));
 	t.regex(message, new RegExp(status));
 });
+
+test('sendpay_success', t => {
+	const message = Formatter.sendpay_success(SubscriptionFixtures.sendpay_success);
+	const id = '035d2b1192dfba134e10e540875d366ebc8bc353d5aa766b80c090b39c3a5d885d'
+	const sats = '100000⚡️'
+	t.regex(message, new RegExp(id));
+	t.regex(message, new RegExp(sats));
+});
+
+test('sendpay_failure', t => {
+	const message = Formatter.sendpay_failure(SubscriptionFixtures.sendpay_failure);
+	const destination = '035d2b1192dfba134e10e540875d366ebc8bc353d5aa766b80c090b39c3a5d885d'
+	const error = 'WIRE_UNKNOWN_NEXT_PEER'
+	t.regex(message, new RegExp(destination));
+	t.regex(message, new RegExp(error));
+});
+
+test('coin_movement', t => {
+	const message = Formatter.coin_movement(SubscriptionFixtures.coin_movement);
+	const type = 'chain_mvt'
+	const credit = '2000000⚡️'
+	const debit = '0⚡️'
+	t.regex(message, new RegExp(type));
+	t.regex(message, new RegExp(credit));
+	t.regex(message, new RegExp(debit));
+});
