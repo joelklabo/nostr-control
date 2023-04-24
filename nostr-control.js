@@ -81,10 +81,11 @@ messageHandler.on('info', async () => {
 	const info = await plugin.rpc('getinfo').catch((error) => {
 		messageHandler.emit('error', error)
 	})
+	
 	if (info === undefined) return
-
+	log('getinfo: \n' + JSON.stringify(info))
 	const message = Formatter.getinfo(info)
-
+	log('getinfo: \n' + message)
 	await bot.publish(message)
 })
 
