@@ -103,7 +103,8 @@ Fees collected: ${info.fees_collected_msat / 1000}⚡️`
 	//	"funding_txid": "4a5e1e4baab89f3a32518a88c31bc87f618f76673e2cc77ab2127b7afdeda33b",
 	//	"channel_ready": false
 
-	static channel_opened(info) {
+	static channel_opened(data) {
+		const info = data.channel_opened
 		return `🆕 ${info.funding_msat / 1000}⚡️ channel open 🆕
 
 with ${info.id}`;
@@ -112,8 +113,9 @@ with ${info.id}`;
 	// Example of a channel_open_failed notification:
 	//	"channel_id": "a2d0851832f0e30a0cf778a826d72f077ca86b69f72677e0267f23f63a0599b"
 
-	static channel_open_failed(info) {
-		return `💔 channel open fail 💔
+	static channel_open_failed(data) {
+		const info = data.channel_open_failed
+		return `💔 channel open failed 💔
 
 channel id ${info.channel_id}`;
 	}
@@ -128,7 +130,8 @@ channel id ${info.channel_id}`;
 	//	"cause" : "remote",
 	//	"message" : "Peer closes channel"
 
-	static channel_state_changed(info) {
+	static channel_state_changed(data) {
+		const info = data.channel_state_changed
 		return `🍃 channel state changed 🍃
 
 peer ${info.peer_id}
@@ -138,12 +141,12 @@ ${info.old_state} -> ${info.new_state}`;
 	// Example of a connect notification:
 	//	"id": "02f6725f9c1c40333b67faea92fd211c183050f28df32cac3f9d69685fe9665432",
 	//	"direction": "in",
-	//	"address": "
+	//	"address": "1.2.3.4:1234"
 
-	static connect(info) {
+	static connect(data) {
 		return `🤝 connected 🤝
 
-${info.id} direction ${info.direction}`;
+${data.id} ${data.direction == 'in' ? '(in)' : '(out)'}`;
 	}
 
 	// Example of a disconnect notification:
@@ -159,10 +162,13 @@ ${info.id}`;
 	//	"label": "unique-label-for-invoice",
 	//	"preimage": "0000000000000000000000000000000000000000000000000000000000000000",
 	//	"msat": 10000msat
-	static invoice_payment(info) {
+	static invoice_payment(data) {
+		const info = data.invoice_payment
+		const msat = parseInt(info.msat.replace('msat', ''));
+		const sats = msat / 1000;
 		return `🧾 payment 🧾
 
-${parseInt(info.msat.replace('msat', '')) / 1000}⚡️
+${sats}⚡️
 for ${info.label}`;
 	}
 
@@ -171,10 +177,13 @@ for ${info.label}`;
 	//	"preimage": "0000000000000000000000000000000000000000000000000000000000000000",
 	//  "msat": 10000msat
 
-	static invoice_creation(info) {
+	static invoice_creation(data) {
+		const info = data.invoice_creation
+		const msat = parseInt(info.msat.replace('msat', ''));
+		const sats = msat / 1000;
 		return `💸 invoice created 💸
 
-${parseInt(info.msat.replace('msat', '')) / 1000}⚡️ 
+${sats}⚡️ 
 for ${info.label}`;
 	}
 
@@ -190,22 +199,28 @@ for ${info.label}`;
 ${info.log}`;
 	}
 
-	// Example of a forward_event notification:
-	//	"payment_hash": "f5a6a059a25d1e329d9b094aeeec8c2191ca037d3f5b0662e21ae850debe8ea2",
-	//	"in_channel": "103x2x1",
-	//	"out_channel": "103x1x1",
-	//	"in_msat": 100001001,
-	//	"out_msat": 100000000,
-	//	"fee_msat": 1001,
-	//	"status": "settled",
-	//	"received_time": 1560696342.368,
-	//	"resolved_time": 1560696342.556
+	// forward_event: {
+	// 	payment_hash:
+	// 		"5b7ae144baf46759dcda3b299695768f73542e746db822683470c8fdc22c8438",
+	// 	in_channel: "566x1x0",
+	// 	in_htlc_id: 1,
+	// 	out_channel: "1092x1x0",
+	// 	in_msat: 10001,
+	// 	out_msat: 10000,
+	// 	fee_msat: 1,
+	// 	status: "settled",
+	// 	style: "tlv",
+	// 	received_time: 1682310437.179,
+	// 	resolved_time: 1682310437.239,
+	// },
 
-	static forward_event(info) {
-		return `🔀 ${Math.round(info.out_msat / 1000)}⚡️ 🔀
+	static forward_event(data) {
+		const info = data.forward_event
+		return `🔀 routed ${info.out_msat} milli ⚡️ 🔀
 
 to ${info.out_channel} from ${info.in_channel}
-fee ${Math.round(info.fee_msat / 1000)}⚡️`;
+fee ${info.fee_msat} milli ⚡️
+status ${info.status}`;
 	}
 
 	// Example of a sendpay_success notification:

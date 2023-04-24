@@ -5,7 +5,7 @@
   "main": "main.js",
   "type": "module",
   "scripts": {
-    "load": "lightning-cli plugin start $(pwd)/nostr-control.js"
+    "test": "ava"
   },
   "keywords": [],
   "author": "",
@@ -13,5 +13,8 @@
   "dependencies": {
     "cln-plugin-js": "^1.0.0",
     "nostr-dm-bot": "^1.0.0"
+  },
+  "devDependencies": {
+    "ava": "^5.2.0"
   }
 }
