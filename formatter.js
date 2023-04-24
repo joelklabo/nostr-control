@@ -71,7 +71,7 @@ GitHub ⭐️: https://github.com/joelklabo/nostr-control`
 
 	static getinfo(info) {
 		const fee_msat = parseInt(info.fees_collected_msat.replace('msat', ''));
-		const fee_sats = Math.round(info.fees_collected_msat / 1000)
+		const fee_sats = Math.round(fee_msat / 1000)
 		return `🤖 node info 🤖
 ${info.alias}
 ID: ${info.id}
