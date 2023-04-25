@@ -206,14 +206,10 @@ ${info.log}`;
 
 	static forward_event(data) {
 		const info = data.forward_event
-		const out_msat = parseInt(info.out_msat.replace('msat', ''));
-		const out_sats = Math.round(out_msat / 1000);
-		const fee_msat = parseInt(info.fee_msat.replace('msat', ''));
-		const fee_sats = Math.round(fee_msat / 1000);
-		return `🔀 routed ${out_sats} ⚡️ 🔀
+		return `🔀 routed ${info.out_msat} 🔀
 
 to ${info.out_channel} from ${info.in_channel}
-fee ${fee_sats} ⚡️
+fee ${info.fee_msat} ⚡️
 status ${info.status}`;
 	}
 
@@ -288,14 +284,10 @@ ${destination} ${message}`;
 
 	static coin_movement(data) {
 		const info = data.coin_movement
-		const credit_msat = parseInt(info.credit_msat.replace('msat', ''))
-		const credit_sat = Math.round(credit_msat / 1000)
-		const debit_msat = parseInt(info.debit_msat.replace('msat', ''))
-		const debit_sat = Math.round(debit_msat / 1000)
 		return `🪙 coin movement: ${info.type} 🪙
 
-credit: ${credit_sat}⚡️
-debit: ${debit_sat}⚡️`;
+credit: ${info.credit_msat}
+debit: ${info.debit_msat}`;
 	}
 
 	// Example of a balance_snapshot (too complex for now):
