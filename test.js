@@ -89,8 +89,8 @@ test('sendpay_failure', t => {
 test('coin_movement', t => {
 	const message = Formatter.coin_movement(SubscriptionFixtures.coin_movement);
 	const type = 'chain_mvt'
-	const credit = '2000000⚡️'
-	const debit = '0⚡️'
+	const credit = '2000000000'
+	const debit = '0'
 	t.regex(message, new RegExp(type));
 	t.regex(message, new RegExp(credit));
 	t.regex(message, new RegExp(debit));
