@@ -8,8 +8,8 @@ const __dirname = dirname(__filename);
 
 export function log(text) {
   const tempFilePath = path.join(__dirname, 'debug.log');
-
-  const message = "[nstrctrl] " + text;
+  const now = new Date();
+  const message = `[${now.toLocaleString()}}] [nstrctrl] ` + text;
 
   try {
     fs.appendFileSync(tempFilePath, message + '\n');
