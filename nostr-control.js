@@ -124,9 +124,13 @@ allNotifications.forEach((notification) => {
 	log('subscribing to ' + notification)
 	plugin.subscribe(notification, async (data) => {
 		log('notification received: ' + notification)
-		const message = Formatter[notification](data)
-		log('publishing message: \n' + message)
-		await bot.publish(message)
+		try {
+			const message = Formatter[notification](data)
+			log('publishing message: \n' + message)
+			await bot.publish(message)
+		} catch (error) {
+			log('formatting error: ' + error)	
+		}
 	})
 })
 
