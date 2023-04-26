@@ -226,7 +226,7 @@ status ${info.status}`;
 	static sendpay_success(data) {
 		const info = data.sendpay_success 
 		const destination = info.destination
-		const sats = info.amount_msat / 1000
+		const sats = info.msatoshi / 1000
 		return `👍 payment succeeded 👍 
 
 ${Math.round(sats)}⚡️
