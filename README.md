@@ -43,6 +43,7 @@ Current commands:
 - `/help` - Get a list of commands
 - `/info` - Get information about your node
 - `/invoice` - Create an invoice (pass amount_sats, label, and description)
+- `/pay` - Pay an invoice (pass bolt11)
 - `/address` - Get a new address (Bech32)
 - `/donate` - See how you can donate to the project
 - `/issues` - Open a GitHub issue

@@ -35,6 +35,14 @@ class MessageHandler extends EventEmitter {
 				case 'issue':
 					this.emit('issue')
 					break
+				case 'pay':
+					if (args.length !== 1) {
+						this.emit('error', 'pay command must have 1 argument [bolt11]')
+						break
+					} else {
+						this.emit('pay', args)
+						break
+					}
 				default:
 					this.emit('unknown')
 					break

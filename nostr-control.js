@@ -103,6 +103,19 @@ messageHandler.on('invoice', async (args) => {
 	await bot.publish(`${result.bolt11}`)
 })
 
+messageHandler.on('pay', async (args) => {
+	const bolt11 = args[0]
+
+	const result = await plugin.rpc('pay', { bolt11: bolt11 }).catch((error) => {
+		messageHandler.emit('error', error)
+	})
+
+	if (result === undefined) return
+
+	await bot.publish(`🤖 paid invoice 🤙`)
+})
+
+
 messageHandler.on('address', async () => {
 	const result = await plugin.rpc('newaddr').catch((error) => {
 		messageHandler.emit('error', error)
