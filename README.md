@@ -21,6 +21,7 @@ nostr-control is a Core Lightning plugin that allows you talk to your node over 
 When you first set up nostr-control you will start recieving DMs from your node about events that are happening. By default you will receive all events, but you can change this in the config file.
 
 The events you can receive are:
+
 - `channel_opened`
 - `channel_open_failed`
 - `channel_state_changed`
