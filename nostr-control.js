@@ -140,6 +140,13 @@ allNotifications.forEach((notification) => {
 		try {
 			const message = Formatter[notification](data)
 			log('publishing message: \n' + message)
+			
+			// Check for formatting issues
+			if (message.includes('undefined')) {
+				log('[ERROR] message contains undefined, logging original payload:')
+				log(JSON.stringify(data))
+			}
+
 			await bot.publish(message)
 		} catch (error) {
 			log('formatting error: ' + error)	
