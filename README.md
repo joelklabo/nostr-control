@@ -1,8 +1,9 @@
-[![Formatter Tests](https://github.com/joelklabo/nostr-control/actions/workflows/formatter-tests.yml/badge.svg)](https://github.com/joelklabo/nostr-control/actions/workflows/formatter-tests.yml)
-
 # nostr-control
 
+[![Formatter Tests](https://github.com/joelklabo/nostr-control/actions/workflows/formatter-tests.yml/badge.svg)](https://github.com/joelklabo/nostr-control/actions/workflows/formatter-tests.yml)
+
 TODO:
+
 - [ ] Disable events
 - [ ] Only settled forwards
 - [ ] Routing summary
