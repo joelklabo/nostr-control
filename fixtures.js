@@ -95,6 +95,7 @@ class SubscriptionFixtures {
         "5c85bf402b87d4860f4a728e2e58a2418bda92cd7aea0ce494f11670cfbfb206",
       destination:
         "035d2b1192dfba134e10e540875d366ebc8bc353d5aa766b80c090b39c3a5d885d",
+      msatoshi: 100000000,
       amount_msat: 100000000,
       amount_sent_msat: 100001001,
       created_at: 1561390572,
