@@ -82,7 +82,7 @@ There is an example config in the root directory `example-config.json` it looks 
 }
 ```
 
-nostr-control also keeps track of it's own settings so you can update things on the fly. Where that file is stored depends on your environment. When running on `regtest` mine was stored here: `/tmp/l1-regtest/regtest/nostr-config.json` 
+nostr-control also keeps track of it's own settings so you can update things on the fly. Create your `config.json` in the root directory and it will be picked up.
 
 You probably won't need to change that but that's where things you set while running will be stored.
 
