@@ -182,7 +182,7 @@ allNotifications.forEach((notification) => {
 		} else if (config.verbosity === 'quiet' && quietedNotifications.includes(notification)) {
 			log(`<verbosity: quiet> ${notification} silenced, skipping`)
 			return
-		} else if (config.show_failed_forwards === false && notification === 'forward_event' && data.status !== 'settled') {
+		} else if (config.show_failed_forwards === false && notification === 'forward_event' && data.forward_event.status !== 'settled') {
 			log(`<show_failed_forwards: false> ${notification} silenced, skipping`)
 			return
 		}
