@@ -207,7 +207,7 @@ ${info.log}`;
 
 	static forward_event(data) {
 		const info = data.forward_event
-		return `🔀 routed ${info.out_msat} 🔀
+		return `🔀 routed ${info.status == "local_failed" ? "N/A" : info.out_msat} 🔀
 
 to ${info.out_channel} from ${info.in_channel}
 fee ${info.status == "local_failed" ? "N/A" : info.fee_msat} ⚡️
