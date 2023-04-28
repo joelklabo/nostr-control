@@ -141,21 +141,33 @@ messageHandler.on('error', async (error) => {
 // Silencing events
 
 messageHandler.on('verbose', async () => {
+	log('setting verbosity to verbose')
 	config.verbosity = 'verbose' 
 	config.show_failed_forwards = true
+	log('updating config')
+	log(JSON.stringify(config))
 	configReader.write(config)
+	await bot.publish('👍 verbosity set to verbose 🤙')
 })
 
 messageHandler.on('quiet', async () => {
+	log('setting verbosity to quiet')
 	config.verbosity = 'quiet' 
 	config.show_failed_forwards = false
+	log('updating config')
+	log(JSON.stringify(config))
 	configReader.write(config)
+	await bot.publish('👍 verbosity set to quiet 🤙')
 })
 
 messageHandler.on('silent', async () => {
+	log('setting verbosity to silent')
 	config.verbosity = 'silent'
 	config.show_failed_forwards = false
+	log('updating config')
+	log(JSON.stringify(config))
 	configReader.write(config)
+	await bot.publish('👍 verbosity set to silent 🤙')
 })
 
 // Subscriptions
