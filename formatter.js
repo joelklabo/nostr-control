@@ -162,8 +162,7 @@ ${info.id}`;
 		const sats = msat / 1000;
 		return `🧾 payment 🧾
 
-${sats}⚡️
-for ${info.label}`;
+${sats}⚡️`;
 	}
 
 	// Example of a invoice_creation notification:		
@@ -177,8 +176,7 @@ for ${info.label}`;
 		const sats = msat / 1000;
 		return `💸 invoice created 💸
 
-${sats}⚡️ 
-for ${info.label}`;
+${sats}⚡️`;
 	}
 
 	// Example of a warning notification:

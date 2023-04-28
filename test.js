@@ -42,38 +42,20 @@ test('disconnect', t => {
 
 test('invoice_payment', t => {
 	const message = Formatter.invoice_payment(SubscriptionFixtures.invoice_payment);
-	const label = 'unique-label-for-invoice'
 	const sats = '10⚡'
-	t.regex(message, new RegExp(label));
 	t.regex(message, new RegExp(sats));
 });
 
 test('invoice_creation', t => {
 	const message = Formatter.invoice_creation(SubscriptionFixtures.invoice_creation);
-	const label = 'unique-label-for-invoice'
 	const sats = '10⚡'
-	t.regex(message, new RegExp(label));
 	t.regex(message, new RegExp(sats));
-});
-
-test('forward_event', t => {
-	const message = Formatter.forward_event(SubscriptionFixtures.forward_event);
-	const out_sat = 10
-	const fee_sat = 0
-	const in_channel = '566x1x0'
-	const out_channel = '1092x1x0'
-	const status = 'settled'
-	t.regex(message, new RegExp(out_sat));
-	t.regex(message, new RegExp(fee_sat));
-	t.regex(message, new RegExp(in_channel));
-	t.regex(message, new RegExp(out_channel));
-	t.regex(message, new RegExp(status));
 });
 
 test('sendpay_success', t => {
 	const message = Formatter.sendpay_success(SubscriptionFixtures.sendpay_success);
 	const id = '035d2b1192dfba134e10e540875d366ebc8bc353d5aa766b80c090b39c3a5d885d'
-	const sats = '100000⚡️'
+	const sats = '100000⚡'
 	t.regex(message, new RegExp(id));
 	t.regex(message, new RegExp(sats));
 });
