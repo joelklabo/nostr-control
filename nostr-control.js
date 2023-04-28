@@ -37,6 +37,7 @@ const quietedNotifications = [
 	`disconnect`,
 	`coin_movement`,
 	`balance_snapshot`,
+	`block_added`,
 	`openchannel_peer_sigs`,
 ]
 
