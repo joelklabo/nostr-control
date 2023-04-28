@@ -49,8 +49,8 @@ bot.on('connect', async (data) => {
 })
 
 bot.on('message', async (message) => {
-	log('message received: ' + message)
 	if (ready === true) {
+		log('message received: ' + message)
 		messageHandler.handle(message)
 	}
 })
