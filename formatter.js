@@ -210,7 +210,7 @@ ${info.log}`;
 		return `🔀 routed ${info.out_msat} 🔀
 
 to ${info.out_channel} from ${info.in_channel}
-fee ${inf0.status == "local_failed" ? "N/A" : info.fee_msat} ⚡️
+fee ${info.status == "local_failed" ? "N/A" : info.fee_msat} ⚡️
 status ${info.status}`;
 	}
 
