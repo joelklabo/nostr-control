@@ -7,7 +7,8 @@ import ConfigReader from "./config-reader.js";
 import MessageHandler from "./message-handler.js";
 import { log, pluginLog } from "./logger.js";
 
-const config = new ConfigReader('config.json').read()
+const configReader = new ConfigReader('config.json')
+const config = configReader.read()
 
 const plugin = new Plugin({ dynamic: true }, pluginLog)
 const bot = new NostrDMBot(config.relay, config.bot_secret, config.your_pubkey)
@@ -29,6 +30,14 @@ const allNotifications = [
 	`block_added`,
 	`openchannel_peer_sigs`,
 	`shutdown`
+]
+
+const quietedNotifications = [
+	`connect`,
+	`disconnect`,
+	`coin_movement`,
+	`balance_snapshot`,
+	`openchannel_peer_sigs`,
 ]
 
 let ready = false
@@ -129,12 +138,42 @@ messageHandler.on('error', async (error) => {
 	await bot.publish(`🤖 error: ${JSON.stringify(error)}`)
 })
 
+// Silencing events
+
+messageHandler.on('verbose', async () => {
+	config.verbosity = 'verbose' 
+	config.show_failed_forwards = true
+	configReader.write(config)
+})
+
+messageHandler.on('quiet', async () => {
+	config.verbosity = 'quiet' 
+	config.show_failed_forwards = false
+	configReader.write(config)
+})
+
+messageHandler.on('silent', async () => {
+	config.verbosity = 'silent'
+	config.show_failed_forwards = false
+	configReader.write(config)
+})
+
 // Subscriptions
 
 allNotifications.forEach((notification) => {
 	log('subscribing to ' + notification)
 	plugin.subscribe(notification, async (data) => {
 		log('notification received: ' + notification)
+		if (config.verbosity === 'silent') {
+			log(`<verbosity: silent> ${notification} silenced, skipping`)
+			return
+		} else if (config.verbosity === 'quiet' && quietedNotifications.includes(notification)) {
+			log(`<verbosity: quiet> ${notification} silenced, skipping`)
+			return
+		} else if (config.show_failed_forwards === false && notification === 'forward_event' && data.status !== 'settled') {
+			log(`<show_failed_forwards: false> ${notification} silenced, skipping`)
+			return
+		}
 		try {
 			const message = Formatter[notification](data)
 			log('publishing message: \n' + message)

@@ -43,6 +43,15 @@ class MessageHandler extends EventEmitter {
 						this.emit('pay', args)
 						break
 					}
+				case 'quiet':
+					this.emit('quiet')
+					break
+				case 'silent':
+					this.emit('silent')
+					break
+				case 'verbose':
+					this.emit('verbose')
+					break
 				default:
 					this.emit('unknown')
 					break
