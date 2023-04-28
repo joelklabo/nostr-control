@@ -4,8 +4,8 @@
 
 TODO:
 
-- [ ] Disable events
-- [ ] Only settled forwards
+- [x] Disable events
+- [x] Only settled forwards
 - [ ] Routing summary
 - [ ] Channel summary
 
@@ -42,6 +42,7 @@ The events you can receive are:
 The really cool thing about nostr-control is that you can communicate with your node. You can respond to it in your DMs and get information about your node. `/help` will give you a list of commands you can use.
 
 Current commands:
+
 - `/help` - Get a list of commands
 - `/info` - Get information about your node
 - `/invoice` - Create an invoice (pass amount_sats, label, and description)
@@ -49,6 +50,9 @@ Current commands:
 - `/address` - Get a new address (Bech32)
 - `/donate` - See how you can donate to the project
 - `/issues` - Open a GitHub issue
+- `/verbose` - show everything (including failed forwards)
+- `/quiet` - show only successful forwards (and payment related events)
+- `/silent` - show no notifications`
 
 ## How do I set it up?
 
@@ -61,9 +65,12 @@ nostr-control uses Node.js and npm. You can install them from [here](https://nod
 ## Config File
 
 nostr-control needs some Nostr information to work. Specifically these items:
+
 - `relay` - The relays you want to send events to
 - `bot_secret` - The account that will be sending you DMs
 - `your_pubkey` - Your pubkey so you will receive the events
+- `verbosity` - How much information you want to receive (see above)
+- `show_failed_forwards` - Whether or not to show failed forwards (see above)
 
 There is an example config in the root directory `example-config.json` it looks like this. Input your information there and nostr-control will pick it up.
 
@@ -85,4 +92,4 @@ Just create an account on any Nostr app and use the secret key (hex). You can al
 
 ## Contribute
 
-PRs and Issues are welcome. Follow me on Nostr @ npub19a86gzxctwtz68l8zld2u9y2fjvyyj4juyx8m5geylssrmfj27eqs22ckt or leave me a tip at my lightning address: joel@klabo.blog. Can also leave a tip on my site: https://klabo.blog/tip
+PRs and Issues are welcome. Follow me on Nostr [npub19a86gzxctwtz68l8zld2u9y2fjvyyj4juyx8m5geylssrmfj27eqs22ckt](https://nostr.directory/p/joelklabo) or leave me a tip at my lightning address: [joel@klabo.blog](lightning:joel@klabo.blog). Can also leave a tip on my site: [Klabo.blog](https://klabo.blog/tip)

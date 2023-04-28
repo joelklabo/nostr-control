@@ -11,7 +11,10 @@ class Formatter {
 /pay [bolt11] - pay an invoice
 /address - get a new address (Bech32)
 /donate - tip me some ⚡️
-/issue - report an issue`
+/issue - report an issue
+/verbose - show everything (including failed forwards)
+/quiet - show only successful forwards (and payment related events)
+/silent - show no notifications`
 	}
 
 	static unknown() {
