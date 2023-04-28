@@ -43,6 +43,7 @@ bot.on('connect', async (data) => {
 
 	// Give the handler some time for old messages
 	setTimeout(async () => {
+		log('ready to handle messages')
 		ready = true
 	}, 3000)
 })
@@ -50,7 +51,6 @@ bot.on('connect', async (data) => {
 bot.on('message', async (message) => {
 	log('message received: ' + message)
 	if (ready === true) {
-		log('ready to handle messages')
 		messageHandler.handle(message)
 	}
 })
@@ -115,7 +115,6 @@ messageHandler.on('pay', async (args) => {
 	await bot.publish(`🤖 paid invoice 🤙`)
 })
 
-
 messageHandler.on('address', async () => {
 	const result = await plugin.rpc('newaddr').catch((error) => {
 		messageHandler.emit('error', error)
@@ -125,7 +124,6 @@ messageHandler.on('address', async () => {
 
 	await bot.publish(`${result.bech32}`)
 })
-
 
 messageHandler.on('error', async (error) => {
 	await bot.publish(`🤖 error: ${JSON.stringify(error)}`)
@@ -140,19 +138,20 @@ allNotifications.forEach((notification) => {
 		try {
 			const message = Formatter[notification](data)
 			log('publishing message: \n' + message)
-			
-			// Check for formatting issues
-			if (message.includes('undefined')) {
-				log('[ERROR] message contains undefined, logging original payload:')
-				log(JSON.stringify(data))
-			}
-
+			checkForUndefined(message, data)
 			await bot.publish(message)
 		} catch (error) {
 			log('formatting error: ' + error)	
 		}
 	})
 })
+
+function checkForUndefined(message, data) {
+	if (message.includes('undefined')) {
+		log('[ERROR] found undefined field, original payload:')
+		log(JSON.stringify(data))
+	}
+}
 
 log('calling connect on bot')
 await bot.connect()
