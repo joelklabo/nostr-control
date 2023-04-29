@@ -322,7 +322,7 @@ ${info.channel_id}`;
 	// Example of shutdown notification:
 
 	static shutdown(info) {
-		return `🔌 Shutting down`;
+		return `🔌 shutting down`;
 	}
 
 }
