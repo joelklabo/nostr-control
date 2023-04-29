@@ -1,3 +1,5 @@
+import MillisatParser from "./millisat-parser.js"
+
 class Formatter {
 
 	// System 
@@ -74,9 +76,8 @@ GitHub ⭐️: https://github.com/joelklabo/nostr-control`
 	//	}	
 
 	static getinfo(info) {
-		const fee_msat = parseInt(info.fees_collected_msat.replace('msat', ''));
-		const fee_sats = Math.round(fee_msat / 1000)
 		return `🤖 node info 🤖
+
 ${info.alias}
 ID: ${info.id}
 Address: ${info.id}@${info.address[0].address}:${info.address[0].port}
@@ -88,7 +89,7 @@ Pending channels: ${info.num_pending_channels}
 Version: ${info.version}
 Blockheight: ${info.blockheight}
 Network: ${info.network}
-Fees collected: ${fee_sats} ⚡️`
+Fees collected: ${MillisatParser.parseInput(info.fees_collected_msat)} ⚡️`
 	}
 
 	// Example of a channel_opened notification:
@@ -99,9 +100,10 @@ Fees collected: ${fee_sats} ⚡️`
 
 	static channel_opened(data) {
 		const info = data.channel_opened
-		return `🆕 ${info.funding_msat / 1000}⚡️ channel open 🆕
+		return `🆕 ${MillisatParser.parseInput(info.funding_msat, true)} ⚡️ channel open 🆕
 
-with ${info.id}`;
+with: 
+${info.id}`;
 	}
 
 	// Example of a channel_open_failed notification:
@@ -111,7 +113,8 @@ with ${info.id}`;
 		const info = data.channel_open_failed
 		return `💔 channel open failed 💔
 
-channel id ${info.channel_id}`;
+channel id:
+${info.channel_id}`;
 	}
 
 	// Example of a channel_state_changed notification:
@@ -128,7 +131,8 @@ channel id ${info.channel_id}`;
 		const info = data.channel_state_changed
 		return `🍃 channel state changed 🍃
 
-peer ${info.peer_id}
+peer:
+${info.peer_id}
 ${info.old_state} -> ${info.new_state}`;
 	}
 
@@ -162,7 +166,7 @@ ${info.id}`;
 		const sats = msat / 1000;
 		return `🧾 payment 🧾
 
-${sats}⚡️`;
+${MillisatParser.parseInput(info.msat)} ⚡️`;
 	}
 
 	// Example of a invoice_creation notification:		
@@ -176,7 +180,7 @@ ${sats}⚡️`;
 		const sats = msat / 1000;
 		return `💸 invoice created 💸
 
-${sats}⚡️`;
+${MillisatParser.parseInput(info.msat)} ⚡️`;
 	}
 
 	// Example of a warning notification:
@@ -208,10 +212,10 @@ ${info.log}`;
 
 	static forward_event(data) {
 		const info = data.forward_event
-		return `🔀 routed ${info.status == "local_failed" ? "N/A" : info.out_msat} 🔀
+		return `🔀 routed ${info.status == "local_failed" ? "N/A" : MillisatParser.parseInput(info.out_msat)} 🔀
 
 to ${info.out_channel} from ${info.in_channel}
-fee ${info.status == "local_failed" ? "N/A" : info.fee_msat} ⚡️
+fee ${info.status == "local_failed" ? "N/A" : MillisatParser.parseInput(info.fee_msat)} ⚡️
 status ${info.status}`;
 	}
 
@@ -228,10 +232,9 @@ status ${info.status}`;
 	static sendpay_success(data) {
 		const info = data.sendpay_success 
 		const destination = info.destination
-		const sats = info.msatoshi / 1000
 		return `👍 payment succeeded 👍 
 
-${Math.round(sats)}⚡️
+${MillisatParser.parseInput(info.msatoshi, true)} ⚡️
 to ${destination}`;
 	}
 
@@ -288,8 +291,8 @@ ${destination} ${message}`;
 		const info = data.coin_movement
 		return `🪙 coin movement: ${info.type} 🪙
 
-credit: ${info.credit_msat}
-debit: ${info.debit_msat}`;
+credit: ${MillisatParser.parseInput(info.credit_msat)}
+debit: ${MillisatParser.parseInput(info.debit_msat)}`;
 	}
 
 	// Example of a balance_snapshot (too complex for now):
