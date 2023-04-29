@@ -89,7 +89,7 @@ Pending channels: ${info.num_pending_channels}
 Version: ${info.version}
 Blockheight: ${info.blockheight}
 Network: ${info.network}
-Fees collected: ${MillisatParser.parseInput(info.fees_collected_msat)} ⚡️`
+Fees collected: ${MillisatParser.parseInput(info.fees_collected_msat, true)} ⚡️`
 	}
 
 	// Example of a channel_opened notification:
@@ -166,7 +166,7 @@ ${info.id}`;
 		const sats = msat / 1000;
 		return `🧾 payment 🧾
 
-${MillisatParser.parseInput(info.msat)} ⚡️`;
+${MillisatParser.parseInput(info.msat, true)} ⚡️`;
 	}
 
 	// Example of a invoice_creation notification:		
@@ -175,12 +175,9 @@ ${MillisatParser.parseInput(info.msat)} ⚡️`;
 	//  "msat": 10000msat
 
 	static invoice_creation(data) {
-		const info = data.invoice_creation
-		const msat = parseInt(info.msat.replace('msat', ''));
-		const sats = msat / 1000;
 		return `💸 invoice created 💸
 
-${MillisatParser.parseInput(info.msat)} ⚡️`;
+${MillisatParser.parseInput(info.msat, true)} ⚡️`;
 	}
 
 	// Example of a warning notification:
@@ -212,10 +209,10 @@ ${info.log}`;
 
 	static forward_event(data) {
 		const info = data.forward_event
-		return `🔀 routed ${info.status == "local_failed" ? "N/A" : MillisatParser.parseInput(info.out_msat)} 🔀
+		return `🔀 routed ${info.status == "local_failed" ? "N/A" : MillisatParser.parseInput(info.out_msat, true)} ⚡️ 🔀
 
 to ${info.out_channel} from ${info.in_channel}
-fee ${info.status == "local_failed" ? "N/A" : MillisatParser.parseInput(info.fee_msat)} ⚡️
+fee ${info.status == "local_failed" ? "N/A" : MillisatParser.parseInput(info.fee_msat, true)} ⚡️
 status ${info.status}`;
 	}
 
@@ -291,8 +288,8 @@ ${destination} ${message}`;
 		const info = data.coin_movement
 		return `🪙 coin movement: ${info.type} 🪙
 
-credit: ${MillisatParser.parseInput(info.credit_msat)}
-debit: ${MillisatParser.parseInput(info.debit_msat)}`;
+credit: ${MillisatParser.parseInput(info.credit_msat, true)} ⚡️
+debit: ${MillisatParser.parseInput(info.debit_msat, true)} ⚡️`;
 	}
 
 	// Example of a balance_snapshot (too complex for now):
