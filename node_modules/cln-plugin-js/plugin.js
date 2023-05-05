@@ -1,15 +1,16 @@
 #!/usr/bin/env node
-import { sendJsonRpcMessage } from "./rpc.js";
-import log from "./log.js";
+import LightningRpc from "./rpc.js";
 import path from "path";
+import FileLogger from "./file-logger.js";
 
 class Plugin {
-  constructor(options, logger) {
+  constructor(options) {
     this.dynamic = options.dynamic || false;
     this.options = [];
     this.methods = [];
     this.subscriptions = {};
-    this.logger = logger || log;
+    this.methodHandlers = {};
+    this.logger = new FileLogger('[plugin]');
   }
 
   addOption = (key, type, description, default_value) => {
@@ -21,7 +22,10 @@ class Plugin {
     });
   };
 
-  addMethod = (key, description, usage) => {
+  addMethod = (key, description, usage, handler) => {
+    this.logger.log('adding method: ' + key);
+    this.methodHandlers[key] = handler;
+    this.logger.log(JSON.stringify(this.methodHandlers));
     this.methods.push({
       name: key,
       description: description,
@@ -33,17 +37,11 @@ class Plugin {
     this.subscriptions[key] = handler;
   };
 
-	rpc = async (method, params) => {
-		return await sendJsonRpcMessage(this.rpc_path, method, params)
-	}
-
   init = {};
 
   // Options
 
-  test = "";
   cli_params = {};
-  rpc_path = "";
 
   manifest = () => {
     return {
@@ -62,7 +60,6 @@ class Plugin {
         test: this.test,
       },
       cli_params: this.cli_params,
-      rpc_path: this.rpc_path,
     };
   };
 
@@ -76,19 +73,21 @@ class Plugin {
       try {
         message = JSON.parse(msg);
       } catch (err) {
-        console.error("Error parsing JSON:", err);
+        this.logger.error("Error parsing JSON:", err);
       }
 
       if (!message || !message.method || message.jsonrpc !== "2.0") {
-        console.error("Invalid JSON-RPC 2.0 message:", line);
+        this.logger.error("Invalid JSON-RPC 2.0 message:", line);
         break;
       }
 
-      this.logger('received message:');
-      this.logger(JSON.stringify(message));
+      this.logger.log('received message:');
+      this.logger.log(JSON.stringify(message));
 
       if (this.subscriptions.hasOwnProperty(message.method)) {
-        this.subscriptions[message.method](message.params);
+        await this.subscriptions[message.method](message.params);
+      } else if (this.methodHandlers.hasOwnProperty(message.method)) {
+        this.sendResponse(message.id, await this.methodHandlers[message.method](message.params));
       } else {
         await this.handleMessage(message);
       }
@@ -103,9 +102,8 @@ class Plugin {
         this.sendResponse(id, this.manifest());
         break;
       case "init":
-        this.test = message.params.options.test;
         const config = message.params.configuration;
-        this.rpc_path = path.join(config["lightning-dir"], config["rpc-file"]);
+        this.rpc = new LightningRpc(path.join(config["lightning-dir"], config["rpc-file"]))
         this.sendResponse(id, this.init);
         break;
     }
@@ -117,8 +115,8 @@ class Plugin {
       id: id,
       result: result,
     };
-    this.logger('sending response:');
-    this.logger(JSON.stringify(response));
+    this.logger.log('sending response:');
+    this.logger.log(JSON.stringify(response));
     process.stdout.write(JSON.stringify(response) + "\n\n");
   };
 

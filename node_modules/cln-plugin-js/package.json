@@ -1,6 +1,6 @@
 {
   "name": "cln-plugin-js",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "description": "Plugin class for CLN",
   "main": "plugin.js",
   "scripts": {
