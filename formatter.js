@@ -176,6 +176,7 @@ ${MillisatParser.parseInput(info.msat, true)} ⚡️`;
 	//  "msat": 10000msat
 
 	static invoice_creation(data) {
+		const info = data.invoice_creation
 		return `💸 invoice created 💸
 
 ${MillisatParser.parseInput(info.msat, true)} ⚡️`;
