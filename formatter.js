@@ -76,11 +76,12 @@ GitHub ⭐️: https://github.com/joelklabo/nostr-control`
 	//	}	
 
 	static getinfo(info) {
+		const addressInfo = info.address.length > 0 ? `${info.id}@${info.address[0].address}:${info.address[0].port}` : "?";
 		return `🤖 node info 🤖
 
 ${info.alias}
 ID: ${info.id}
-Address: ${info.id}@${info.address[0].address}:${info.address[0].port}
+Address: ${info.id}@${addressInfo}
 Color: ${info.color}
 Peers: ${info.num_peers}
 Active channels: ${info.num_active_channels}
