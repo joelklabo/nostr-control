@@ -228,12 +228,7 @@ status ${info.status}`;
 	//	"payment_preimage": "9540d98095fd7f37687ebb7759e733934234d4f934e34433d4998a37de3733ee"
 
 	static sendpay_success(data) {
-		const info = data.sendpay_success 
-		const destination = info.destination
-		return `👍 payment succeeded 👍 
-
-${MillisatParser.parseInput(info.msatoshi, true)} ⚡️
-to ${destination}`;
+		return `👍 payment succeeded 👍`
 	}
 
 	// Example of a sendpay_failure notification:
