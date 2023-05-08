@@ -1,53 +1,123 @@
 import net from 'net';
+import FileLogger from './file-logger.js';
 
-async function sendJsonRpcMessage(socketPath, method, params = {}) {
-  const socket = await new Promise((resolve, reject) => {
-    const client = net.connect({ path: socketPath }, () => {
-      resolve(client);
-    });
+class LightningRpc {
+  constructor(socketPath) {
+    if (!socketPath) {
+      throw new Error('The RPC wrapper needs a socket path.');
+    }
+    this.socketPath = socketPath;
+    this.rpc = net.createConnection({ path: this.socketPath });
+    this.id = 0;
+    this.allowedErrors = 10;
+    this.logger = new FileLogger('[RPC]');
 
-    client.on('error', (err) => {
-      reject(err);
-    });
-  });
-
-  const messageId = 1; // You can use a unique ID generator here for concurrent requests
-  const jsonRpcRequest = {
-    jsonrpc: '2.0',
-    id: messageId,
-    method: method,
-    params: params,
-  };
-
-  return new Promise((resolve, reject) => {
-    socket.setEncoding('utf8');
-
-    socket.on('data', (data) => {
+    this.rpc.on('timeout', async () => {
+      this.logger.log('timeout')
+      this.rpc.destroy();
       try {
-        const response = JSON.parse(data);
-
-        if (response.jsonrpc === '2.0' && response.id === messageId) {
-          if (response.hasOwnProperty('result')) {
-            resolve(response.result);
-          } else if (response.hasOwnProperty('error')) {
-            reject(response.error);
-          }
-        }
-      } catch (err) {
-        reject(err);
+        await this.restoreSocket();
+      } catch (e) {
+        process.exit();
       }
     });
 
-    socket.on('error', (err) => {
-      reject(err);
+    this.rpc.on('error', async (e) => {
+      this.logger.error('error', e)
+      if (this.allowedErrors > 0) {
+        try {
+          await this.restoreSocket();
+        } catch (e) {
+          process.exit();
+        }
+      } else {
+        throw e;
+      }
     });
 
-    socket.on('end', () => {
-      console.log('Socket connection closed');
+    this.rpc.on('close', async (hadError) => {
+      this.logger.log(`close with error: ${hadError}`)
+      if (hadError === true && this.allowedErrors <= 0) {
+        throw new Error('An unexpected failure caused the socket ' + this.socketPath + ' to close.');
+      } else {
+        this.rpc.destroy();
+        try {
+          await this.restoreSocket();
+        } catch (e) {
+          process.exit();
+        }
+      }
     });
 
-    socket.write(JSON.stringify(jsonRpcRequest) + '\n');
-  });
+    this.rpc.on('error', async (e) => {
+      this.logger.error('error', e)
+      this.rpc.destroy();
+      try {
+        await this.restoreSocket();
+      } catch (e) {
+        process.exit();
+      }
+    });
+
+    setInterval(() => this.allowedErrors++, 1000 * 60 * 30);
+
+    this.buffer = '';
+  }
+
+  async readResponse(chunk, resolve, reject) {
+    this.buffer += chunk;
+    try {
+      const res = JSON.parse(this.buffer);
+      this.logger.log(`received response: ${this.buffer}`);
+      this.buffer = '';
+      resolve(res);
+    } catch (e) {
+      this.rpc.once('data', (chunk) => {
+        this.readResponse(chunk, resolve, reject);
+      });
+    }
+  }
+
+  async _jsonRpcRequest(data) {
+    return new Promise((resolve, reject) => {
+      this.rpc.write(data);
+      this.rpc.once('data', (chunk) => {
+        this.readResponse(chunk, resolve, reject);
+      });
+    });
+  }
+
+  async call(_method, _params) {
+    this.logger.log(`calling method: ${_method} with params: ${JSON.stringify(_params)}`);
+    _params = _params || {};
+    const request = {
+      jsonrpc: '2.0',
+      id: this.id,
+      method: _method,
+      params: _params,
+    };
+
+    const response = await this._jsonRpcRequest(JSON.stringify(request));
+    if (response.hasOwnProperty('error')) {
+      throw new Error('Calling \'' + _method + '\' with params \'' + _params + '\' returned \'' + response.error + '\'');
+    } else if (!response.hasOwnProperty('result')) {
+      throw new Error('Got a non-JSONRPC2 response \'' + response + '\' when calling \'' + _method + '\' with params \'' + _params + '\' returned \'' + response.error + '\'');
+    }
+
+    return response.result;
+  }
+
+  async restoreSocket() {
+    this.logger.log('restoring socket');
+    return new Promise((resolve, reject) => {
+      this.rpc.destroy();
+      this.allowedErrors--;
+      this.rpc = net.createConnection({ path: this.socketPath });
+      this.rpc.on('connect', () => resolve());
+      this.rpc.on('error', () => reject());
+      this.rpc.on('timeout', () => reject());
+    });
+  }
 }
 
-export { sendJsonRpcMessage };
+export default LightningRpc;

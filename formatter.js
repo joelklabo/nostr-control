@@ -76,11 +76,12 @@ GitHub ⭐️: https://github.com/joelklabo/nostr-control`
 	//	}	
 
 	static getinfo(info) {
+		const addressInfo = info.address.length > 0 ? `${info.id}@${info.address[0].address}:${info.address[0].port}` : "?";
 		return `🤖 node info 🤖
 
 ${info.alias}
 ID: ${info.id}
-Address: ${info.id}@${info.address[0].address}:${info.address[0].port}
+Address: ${info.id}@${addressInfo}
 Color: ${info.color}
 Peers: ${info.num_peers}
 Active channels: ${info.num_active_channels}
@@ -175,6 +176,7 @@ ${MillisatParser.parseInput(info.msat, true)} ⚡️`;
 	//  "msat": 10000msat
 
 	static invoice_creation(data) {
+		const info = data.invoice_creation
 		return `💸 invoice created 💸
 
 ${MillisatParser.parseInput(info.msat, true)} ⚡️`;
@@ -227,12 +229,7 @@ status ${info.status}`;
 	//	"payment_preimage": "9540d98095fd7f37687ebb7759e733934234d4f934e34433d4998a37de3733ee"
 
 	static sendpay_success(data) {
-		const info = data.sendpay_success 
-		const destination = info.destination
-		return `👍 payment succeeded 👍 
-
-${MillisatParser.parseInput(info.msatoshi, true)} ⚡️
-to ${destination}`;
+		return `👍 payment succeeded 👍`
 	}
 
 	// Example of a sendpay_failure notification:

@@ -1,4 +1,4 @@
-# Example Usaage
+# Example Usage
 
 ```javascript
 #!/usr/bin/env node
