@@ -88,7 +88,7 @@ messageHandler.on('unknown', async () => {
 })
 
 messageHandler.on('info', async () => {
-	const info = await plugin.rpc('getinfo').catch((error) => {
+	const info = await plugin.rpc.call('getinfo').catch((error) => {
 		messageHandler.emit('error', error)
 	})
 	
@@ -104,7 +104,7 @@ messageHandler.on('invoice', async (args) => {
 	const label = args[1]
 	const description = args[2]
 
-	const result = await plugin.rpc('invoice', { amount_msat: msat_amount, label: label, description: description }).catch((error) => {
+	const result = await plugin.rpc.call('invoice', { amount_msat: msat_amount, label: label, description: description }).catch((error) => {
 		messageHandler.emit('error', error)
 	})
 
@@ -116,7 +116,7 @@ messageHandler.on('invoice', async (args) => {
 messageHandler.on('pay', async (args) => {
 	const bolt11 = args[0]
 
-	const result = await plugin.rpc('pay', { bolt11: bolt11 }).catch((error) => {
+	const result = await plugin.rpc.call('pay', { bolt11: bolt11 }).catch((error) => {
 		messageHandler.emit('error', error)
 	})
 
@@ -126,7 +126,7 @@ messageHandler.on('pay', async (args) => {
 })
 
 messageHandler.on('address', async () => {
-	const result = await plugin.rpc('newaddr').catch((error) => {
+	const result = await plugin.rpc.call('newaddr').catch((error) => {
 		messageHandler.emit('error', error)
 	})
 
