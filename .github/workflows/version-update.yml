@@ -25,4 +25,8 @@ jobs:
         git config user.email "<your-bot-email@example.com>"
         git add VERSION
         git diff-index --quiet HEAD || git commit -m "Update version file"
+
+        git config --global credential.helper store
+        echo "https://${{ secrets.GITHUB_TOKEN }}:@github.com" > ~/.git-credentials
+
         git push
