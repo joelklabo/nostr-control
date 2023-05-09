@@ -55,15 +55,15 @@ class NostrDMBot extends EventEmitter {
 
 		event.id = getEventHash(event)
 		event.sig = signEvent(event, this.private_key)
-		
+
 		let pub = this.relay.publish(event)
-		
+
 		pub.on('ok', () => {
-			console.log('Message sent')
+			//console.log('Message sent')
 		})
-		
+
 		pub.on('failed', () => {
-			console.log('Message failed to send')
+			//console.log('Message failed to send')
 		})
   }
 }

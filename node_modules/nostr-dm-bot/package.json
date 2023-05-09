@@ -1,6 +1,6 @@
 {
   "name": "nostr-dm-bot",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "A light wrapper around nostr-tools for creating a bot you can DM with",
   "main": "nostr-dm-bot.js",
   "type": "module",

@@ -4,13 +4,13 @@ import path from "path";
 import FileLogger from "./file-logger.js";
 
 class Plugin {
-  constructor(options) {
+  constructor(options, logger = new FileLogger('[plugin]')) {
     this.dynamic = options.dynamic || false;
     this.options = [];
     this.methods = [];
     this.subscriptions = {};
     this.methodHandlers = {};
-    this.logger = new FileLogger('[plugin]');
+    this.logger = logger;
   }
 
   addOption = (key, type, description, default_value) => {
@@ -108,6 +108,10 @@ class Plugin {
         break;
     }
   };
+
+  log(message) {
+    this.logger.log(message);
+  }
 
   sendResponse = (id, result) => {
     const response = {

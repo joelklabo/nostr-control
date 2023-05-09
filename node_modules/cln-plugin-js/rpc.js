@@ -2,7 +2,7 @@ import net from 'net';
 import FileLogger from './file-logger.js';
 
 class LightningRpc {
-  constructor(socketPath) {
+  constructor(socketPath, logger = new FileLogger('[RPC]')) {
     if (!socketPath) {
       throw new Error('The RPC wrapper needs a socket path.');
     }
@@ -10,7 +10,7 @@ class LightningRpc {
     this.rpc = net.createConnection({ path: this.socketPath });
     this.id = 0;
     this.allowedErrors = 10;
-    this.logger = new FileLogger('[RPC]');
+    this.logger = logger;
 
     this.rpc.on('timeout', async () => {
       this.logger.log('timeout')
@@ -96,14 +96,15 @@ class LightningRpc {
       method: _method,
       params: _params,
     };
-
+    this.logger.log(`sending request: ${JSON.stringify(request)}`);
+  
     const response = await this._jsonRpcRequest(JSON.stringify(request));
     if (response.hasOwnProperty('error')) {
-      throw new Error('Calling \'' + _method + '\' with params \'' + _params + '\' returned \'' + response.error + '\'');
+      this.logger.error(`error response: ${JSON.stringify(response)}`);
     } else if (!response.hasOwnProperty('result')) {
-      throw new Error('Got a non-JSONRPC2 response \'' + response + '\' when calling \'' + _method + '\' with params \'' + _params + '\' returned \'' + response.error + '\'');
+      this.logger.error(`<NO RESULT> error response: ${JSON.stringify(response)}`);
     }
-
+  
     return response.result;
   }
 
