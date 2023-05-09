@@ -1,0 +1,28 @@
+name: Update Version
+
+on:
+  push:
+    branches:
+      - '*'
+
+jobs:
+  update_version:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Update version file
+      run: |
+        VERSION=$(git describe --tags --always)
+        COMMIT_HASH=$(git rev-parse --short HEAD)
+        echo "Version: ${VERSION}, Commit hash: ${COMMIT_HASH}" > VERSION
+
+    - name: Commit and push changes
+      run: |
+        git config user.name "GitHub Actions Bot"
+        git config user.email "<your-bot-email@example.com>"
+        git add VERSION
+        git diff-index --quiet HEAD || git commit -m "Update version file"
+        git push
