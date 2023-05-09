@@ -12,6 +12,8 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }} # Use the GITHUB_TOKEN for authentication
 
     - name: Update version file
       run: |
