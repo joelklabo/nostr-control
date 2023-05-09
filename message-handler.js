@@ -10,7 +10,7 @@ class MessageHandler extends EventEmitter {
 			const trimmed = message.substring(1)
 			const args = trimmed.split(' ').slice(1)
 			const command = trimmed.split(' ')[0]
-			switch (command) {
+			switch (command.toLowerCase()) {
 				case 'help':
 					this.emit('help')
 					break
