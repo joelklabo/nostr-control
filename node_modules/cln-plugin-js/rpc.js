@@ -1,5 +1,5 @@
 import net from 'net';
-import FileLogger from './file-logger.js';
+import FileLogger from 'cln-file-logger';
 
 class LightningRpc {
   constructor(socketPath, logger = new FileLogger('[RPC]')) {
@@ -13,7 +13,7 @@ class LightningRpc {
     this.logger = logger;
 
     this.rpc.on('timeout', async () => {
-      this.logger.log('timeout')
+      this.logger.logWarn('timeout')
       this.rpc.destroy();
       try {
         await this.restoreSocket();
@@ -23,7 +23,7 @@ class LightningRpc {
     });
 
     this.rpc.on('error', async (e) => {
-      this.logger.error('error', e)
+      this.logger.logError(e)
       if (this.allowedErrors > 0) {
         try {
           await this.restoreSocket();
@@ -36,7 +36,7 @@ class LightningRpc {
     });
 
     this.rpc.on('close', async (hadError) => {
-      this.logger.log(`close with error: ${hadError}`)
+      this.logger.logError(`close with error: ${hadError}`)
       if (hadError === true && this.allowedErrors <= 0) {
         throw new Error('An unexpected failure caused the socket ' + this.socketPath + ' to close.');
       } else {
@@ -50,7 +50,7 @@ class LightningRpc {
     });
 
     this.rpc.on('error', async (e) => {
-      this.logger.error('error', e)
+      this.logger.logError(e)
       this.rpc.destroy();
       try {
         await this.restoreSocket();
@@ -68,7 +68,8 @@ class LightningRpc {
     this.buffer += chunk;
     try {
       const res = JSON.parse(this.buffer);
-      this.logger.log(`received response: ${this.buffer}`);
+      this.logger.logInfo('received response');
+      this.logger.logInfo(this.buffer);
       this.buffer = '';
       resolve(res);
     } catch (e) {
@@ -88,7 +89,7 @@ class LightningRpc {
   }
 
   async call(_method, _params) {
-    this.logger.log(`calling method: ${_method} with params: ${JSON.stringify(_params)}`);
+    this.logger.logInfo(`calling method: ${_method} with params: ${JSON.stringify(_params)}`);
     _params = _params || {};
     const request = {
       jsonrpc: '2.0',
@@ -96,20 +97,22 @@ class LightningRpc {
       method: _method,
       params: _params,
     };
-    this.logger.log(`sending request: ${JSON.stringify(request)}`);
+    this.logger.logInfo('sending request')
+    this.logger.logInfo(request);
   
     const response = await this._jsonRpcRequest(JSON.stringify(request));
     if (response.hasOwnProperty('error')) {
-      this.logger.error(`error response: ${JSON.stringify(response)}`);
+      this.logger.logError('error response')
+      this.logger.logError(response.error);
     } else if (!response.hasOwnProperty('result')) {
-      this.logger.error(`<NO RESULT> error response: ${JSON.stringify(response)}`);
+      this.logger.logError(`<NO RESULT> error response: ${JSON.stringify(response)}`);
     }
   
     return response.result;
   }
 
   async restoreSocket() {
-    this.logger.log('restoring socket');
+    this.logger.logInfo('restoring socket');
     return new Promise((resolve, reject) => {
       this.rpc.destroy();
       this.allowedErrors--;

@@ -11,6 +11,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "cln-file-logger": "^1.1.0",
     "cln-plugin-js": "^1.4.0",
     "nostr-dm-bot": "^1.0.0"
   },

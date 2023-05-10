@@ -5,19 +5,21 @@ import NostrDMBot from "nostr-dm-bot";
 import Formatter from "./formatter.js";
 import ConfigReader from "./config-reader.js";
 import MessageHandler from "./message-handler.js";
-import FileLogger from "cln-plugin-js/file-logger.js";
+import FileLogger from "cln-file-logger";
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
+const logPath = path.join(__dirname, 'plugin.log')
 
 const configReader = new ConfigReader('config.json')
 const config = configReader.read()
 
-const plugin = new Plugin({ dynamic: true }, new FileLogger('[nstrctrl]', path.join(__dirname, 'plugin.log')))
-const bot = new NostrDMBot(config.relay, config.bot_secret, config.your_pubkey)
+const logger = new FileLogger('[nstrctrl]', logPath) 
+const plugin = new Plugin({ dynamic: true }, logger.child('[plugin]'))
+const bot = new NostrDMBot(config.relay, config.bot_secret, config.your_pubkey, logger.child('[NostrDMBot]'))
 const messageHandler = new MessageHandler()
 
 const allNotifications = [
@@ -52,21 +54,22 @@ let ready = false
 // Bot
 
 bot.on('connect', async (data) => {
-	plugin.log('connected to relay')
+	logger.logInfo('connected to relay')
 
 	await bot.publish('👍 connected to nostr-control 🤙')
 	await bot.publish(Formatter.help())
 
 	// Give the handler some time for old messages
 	setTimeout(async () => {
-		plugin.log('ready to handle messages')
+		logger.logInfo('ready to handle messages')
 		ready = true
 	}, 3000)
 })
 
 bot.on('message', async (message) => {
 	if (ready === true) {
-		plugin.log('message received: ' + message)
+		logger.logInfo('message received')
+		logger.logInfo(message)
 		messageHandler.handle(message)
 	}
 })
@@ -75,21 +78,29 @@ bot.on('message', async (message) => {
 
 messageHandler.on('help', async () => {
 	const message = Formatter.help()
+	logger.logInfo('publishing message')
+	logger.logInfo(message)
 	await bot.publish(message)
 })
 
 messageHandler.on('donate', async () => {
 	const message = Formatter.donate()
+	logger.logInfo('publishing message')
+	logger.logInfo(message)
 	await bot.publish(message)
 })
 
 messageHandler.on('issue', async () => {
 	const message = Formatter.issue()
+	logger.logInfo('publishing message')
+	logger.logInfo(message)
 	await bot.publish(message)
 })
 
 messageHandler.on('unknown', async () => {
 	const message = Formatter.unknown()
+	logger.logInfo('publishing message')
+	logger.logInfo(message)
 	await bot.publish(message)
 })
 
@@ -99,9 +110,9 @@ messageHandler.on('info', async () => {
 	})
 	
 	if (info === undefined) return
-	plugin.log('getinfo: \n' + JSON.stringify(info))
 	const message = Formatter.getinfo(info)
-	plugin.log('getinfo: \n' + message)
+	logger.logInfo('publishing message')
+	logger.logInfo(message)
 	await bot.publish(message)
 })
 
@@ -116,7 +127,15 @@ messageHandler.on('invoice', async (args) => {
 
 	if (result === undefined) return
 
-	await bot.publish(`${result.bolt11}`)
+	logger.logInfo('result')
+	logger.logInfo(result)
+
+	const message = `${result.bolt11}`
+
+	logger.logInfo('publishing message')
+	logger.logInfo(message)
+
+	await bot.publish(message)
 })
 
 messageHandler.on('pay', async (args) => {
@@ -127,6 +146,14 @@ messageHandler.on('pay', async (args) => {
 	})
 
 	if (result === undefined) return
+	
+	logger.logInfo('result')
+	logger.logInfo(result)
+
+	const message = `🤖 paid invoice 🤙`
+	
+	logger.logInfo('publishing message')
+	logger.logInfo(message)
 
 	await bot.publish(`🤖 paid invoice 🤙`)
 })
@@ -138,7 +165,15 @@ messageHandler.on('address', async () => {
 
 	if (result === undefined) return
 
-	await bot.publish(`${result.bech32}`)
+	logger.logInfo('result')
+	logger.logInfo(result)
+	
+	const message = `${result.bech32}`
+
+	logger.logInfo('publishing message')
+	logger.logInfo(message)
+
+	await bot.publish(message)
 })
 
 messageHandler.on('error', async (error) => {
@@ -148,31 +183,31 @@ messageHandler.on('error', async (error) => {
 // Silencing events
 
 messageHandler.on('verbose', async () => {
-	plugin.log('setting verbosity to verbose')
+	logger.logInfo('setting verbosity to verbose')
 	config.verbosity = 'verbose' 
 	config.show_failed_forwards = true
-	plugin.log('updating config')
-	plugin.log(JSON.stringify(config))
+	logger.logInfo('updating config')
+	logger.logInfo(config)
 	configReader.write(config)
 	await bot.publish('👍 verbosity set to verbose 🤙')
 })
 
 messageHandler.on('quiet', async () => {
-	plugin.log('setting verbosity to quiet')
+	logger.logInfo('setting verbosity to quiet')
 	config.verbosity = 'quiet' 
 	config.show_failed_forwards = false
-	plugin.log('updating config')
-	plugin.log(JSON.stringify(config))
+	logger.logInfo('updating config')
+	logger.logInfo(config)
 	configReader.write(config)
 	await bot.publish('👍 verbosity set to quiet 🤙')
 })
 
 messageHandler.on('silent', async () => {
-	plugin.log('setting verbosity to silent')
+	logger.logInfo('setting verbosity to silent')
 	config.verbosity = 'silent'
 	config.show_failed_forwards = false
-	plugin.log('updating config')
-	plugin.log(JSON.stringify(config))
+	logger.logInfo('updating config')
+	logger.logInfo(config)
 	configReader.write(config)
 	await bot.publish('👍 verbosity set to silent 🤙')
 })
@@ -180,39 +215,41 @@ messageHandler.on('silent', async () => {
 // Subscriptions
 
 allNotifications.forEach((notification) => {
-	plugin.log('subscribing to ' + notification)
+	logger.logInfo('subscribing to ' + notification)
 	plugin.subscribe(notification, async (data) => {
-		plugin.log('notification received: ' + notification)
+		logger.logInfo('notification received: ' + notification)
 		if (config.verbosity === 'silent') {
-			plugin.log(`<verbosity: silent> ${notification} silenced, skipping`)
+			logger.logInfo(`<verbosity: silent> ${notification} silenced, skipping`)
 			return
 		} else if (config.verbosity === 'quiet' && quietedNotifications.includes(notification)) {
-			plugin.log(`<verbosity: quiet> ${notification} silenced, skipping`)
+			logger.logInfo(`<verbosity: quiet> ${notification} silenced, skipping`)
 			return
 		} else if (config.show_failed_forwards === false && notification === 'forward_event' && data.forward_event.status !== 'settled') {
-			plugin.log(`<show_failed_forwards: false> ${notification} silenced, skipping`)
+			logger.logInfo(`<show_failed_forwards: false> ${notification} silenced, skipping`)
 			return
 		}
 		try {
 			const message = Formatter[notification](data)
-			plugin.log('publishing message: \n' + message)
+			logger.logInfo('publishing message')
+			logger.logInfo(message)
 			checkForUndefined(message, data)
 			await bot.publish(message)
 		} catch (error) {
-			plugin.log('formatting error: ' + error)	
+			logger.logError('formatting error') 
+			logger.logError(error)	
 		}
 	})
 })
 
 function checkForUndefined(message, data) {
 	if (message.includes('undefined')) {
-		plugin.log('[ERROR] found undefined field, original payload:')
-		plugin.log(JSON.stringify(data))
+		logger.logError('found undefined field, original payload:')
+		logger.logError(data)
 	}
 }
 
-plugin.log('calling connect on bot')
+logger.logInfo('calling connect on bot')
 await bot.connect()
 
-plugin.log('calling start')
+logger.logInfo('calling start')
 plugin.start()

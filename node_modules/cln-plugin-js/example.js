@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import FileLogger from "./file-logger.js";
+import FileLogger from "cln-file-logger";
 import Plugin from "./plugin.js";
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -27,7 +27,9 @@ const allNotifications = [
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-const plugin = new Plugin({ dynamic: true }, new FileLogger('[Example]', path.join(__dirname, 'example.log')))
+const logger = new FileLogger('[Example]', path.join(__dirname, 'example.log'))
+
+const plugin = new Plugin({ dynamic: true }, logger)
 
 plugin.addMethod("testinfo", "get info", "description", async () => {
 	return await plugin.rpc.call("getinfo")
@@ -36,8 +38,8 @@ plugin.addMethod("testinfo", "get info", "description", async () => {
 
 allNotifications.forEach(notification => {
 	plugin.subscribe(notification, (params) => {
-		plugin.log(`Received notification: ${notification}`)
-		plugin.log(`Params: ${JSON.stringify(params)}`)
+		logger.logInfo(`Received notification: ${notification}`)
+		logger.logInfo(`Params: ${JSON.stringify(params)}`)
 	})
 })
 
