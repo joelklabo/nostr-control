@@ -211,8 +211,8 @@ ${info.log}`;
 
 	static async forward_event(data) {
 		const info = data.forward_event
-		const in_alias = await this.aliasCache.get(info.in_channel)
-		const out_alias = await this.aliasCache.get(info.out_channel)
+		const in_alias = await this.aliasCache.get(info.in_channel) || info.in_channel
+		const out_alias = await this.aliasCache.get(info.out_channel) || info.out_channel
 
 		return `🔀 routed ${info.status == "local_failed" ? "N/A" : MillisatParser.parseInput(info.out_msat, true)} ⚡️ 🔀
 

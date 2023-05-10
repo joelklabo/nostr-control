@@ -21,7 +21,7 @@ class AliasFetcher {
 			} else {
 				this.logger.logInfo(`alias (${this.aliasCache[scid]}) found for (${scid})`);
 			}
-			return this.aliasCache[scid] || scid;
+			return this.aliasCache[scid];
 		}
 }
 
