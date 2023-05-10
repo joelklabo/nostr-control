@@ -14,6 +14,9 @@ class MessageHandler extends EventEmitter {
 				case 'help':
 					this.emit('help')
 					break
+				case 'version':
+					this.emit('version')
+					break
 				case 'info':
 					this.emit('info')
 					break

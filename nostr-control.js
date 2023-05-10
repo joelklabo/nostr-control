@@ -8,6 +8,8 @@ import MessageHandler from "./message-handler.js";
 import FileLogger from "cln-file-logger";
 import AliasFetcher from "./alias-fetcher.js";
 import path from 'path';
+import git from 'git-rev-sync';
+import { execSync } from 'child_process';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 
@@ -50,6 +52,8 @@ const plugin = new Plugin({ dynamic: true }, logger.child('[plugin]'))
 const bot = new NostrDMBot(config.relay, config.bot_secret, config.your_pubkey, logger.child('[NostrDMBot]'))
 const messageHandler = new MessageHandler()
 const aliasFetcher = new AliasFetcher(plugin, logger.child('[AliasFetcher]'))
+const currentCommitHash = git.long(path.join(__dirname, '.git'))
+logger.logInfo('current commit hash: ' + currentCommitHash)
 
 let ready = false
 
@@ -86,6 +90,12 @@ messageHandler.on('help', async () => {
 	logger.logInfo('publishing message')
 	logger.logInfo(message)
 	await bot.publish(message)
+})
+
+messageHandler.on('version', async () => {
+	logger.logInfo('publishing message')
+	logger.logInfo(currentCommitHash)
+	await bot.publish(currentCommitHash)
 })
 
 messageHandler.on('donate', async () => {

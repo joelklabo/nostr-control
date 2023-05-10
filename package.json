@@ -13,6 +13,7 @@
   "dependencies": {
     "cln-file-logger": "^1.1.0",
     "cln-plugin-js": "^1.4.0",
+    "git-rev-sync": "^3.0.2",
     "nostr-dm-bot": "^1.0.0"
   },
   "devDependencies": {

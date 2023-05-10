@@ -16,7 +16,8 @@ class Formatter {
 /issue - report an issue
 /verbose - show everything (including failed forwards)
 /quiet - show only successful forwards (and payment related events)
-/silent - show no notifications`
+/silent - show no notifications
+/version - see the current version of nostr-control`
 	}
 
 	static unknown() {

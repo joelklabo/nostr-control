@@ -56,6 +56,7 @@ Current commands:
 - `/verbose` - show everything (including failed forwards)
 - `/quiet` - show only successful forwards (and payment related events)
 - `/silent` - show no notifications`
+- `/version` - see the version of nostr-control you are running
 
 ## How do I set it up?
 
