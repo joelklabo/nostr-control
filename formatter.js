@@ -209,11 +209,14 @@ ${info.log}`;
 	// 	resolved_time: 1682310437.239,
 	// },
 
-	static forward_event(data) {
+	static async forward_event(data) {
 		const info = data.forward_event
+		const in_alias = await this.aliasCache.get(info.in_channel) || info.in_channel
+		const out_alias = await this.aliasCache.get(info.out_channel) || info.out_channel
+
 		return `🔀 routed ${info.status == "local_failed" ? "N/A" : MillisatParser.parseInput(info.out_msat, true)} ⚡️ 🔀
 
-to ${info.out_channel} from ${info.in_channel}
+${in_alias} > ${out_alias}
 fee ${info.status == "local_failed" ? "N/A" : MillisatParser.parseInput(info.fee_msat, true)} ⚡️
 status ${info.status}`;
 	}

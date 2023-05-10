@@ -6,21 +6,10 @@ import Formatter from "./formatter.js";
 import ConfigReader from "./config-reader.js";
 import MessageHandler from "./message-handler.js";
 import FileLogger from "cln-file-logger";
+import AliasFetcher from "./alias-fetcher.js";
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-const logPath = path.join(__dirname, 'plugin.log')
-
-const configReader = new ConfigReader('config.json')
-const config = configReader.read()
-
-const logger = new FileLogger('[nstrctrl]', logPath) 
-const plugin = new Plugin({ dynamic: true }, logger.child('[plugin]'))
-const bot = new NostrDMBot(config.relay, config.bot_secret, config.your_pubkey, logger.child('[NostrDMBot]'))
-const messageHandler = new MessageHandler()
 
 const allNotifications = [
 	`channel_opened`,
@@ -49,7 +38,23 @@ const quietedNotifications = [
 	`openchannel_peer_sigs`,
 ]
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+const logPath = path.join(__dirname, 'plugin.log')
+
+const configReader = new ConfigReader('config.json')
+const config = configReader.read()
+
+const logger = new FileLogger('[nstrctrl]', logPath) 
+const plugin = new Plugin({ dynamic: true }, logger.child('[plugin]'))
+const bot = new NostrDMBot(config.relay, config.bot_secret, config.your_pubkey, logger.child('[NostrDMBot]'))
+const messageHandler = new MessageHandler()
+const aliasFetcher = new AliasFetcher(plugin, logger.child('[AliasFetcher]'))
+
 let ready = false
+
+logger.logInfo('current config')
+logger.logInfo(config)
 
 // Bot
 
@@ -229,7 +234,7 @@ allNotifications.forEach((notification) => {
 			return
 		}
 		try {
-			const message = Formatter[notification](data)
+			const message = await Formatter[notification](data)
 			logger.logInfo('publishing message')
 			logger.logInfo(message)
 			checkForUndefined(message, data)
@@ -253,3 +258,5 @@ await bot.connect()
 
 logger.logInfo('calling start')
 plugin.start()
+
+Formatter.aliasCache = aliasFetcher
