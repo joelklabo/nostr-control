@@ -49,6 +49,7 @@ const logger = new FileLogger('[nstrctrl]', logPath)
 const plugin = new Plugin({ dynamic: true }, logger.child('[plugin]'))
 const bot = new NostrDMBot(config.relay, config.bot_secret, config.your_pubkey, logger.child('[NostrDMBot]'))
 const messageHandler = new MessageHandler()
+const aliasFetcher = new AliasFetcher(plugin, logger.child('[AliasFetcher]'))
 
 let ready = false
 
@@ -257,7 +258,5 @@ await bot.connect()
 
 logger.logInfo('calling start')
 plugin.start()
-
-const aliasFetcher = new AliasFetcher(plugin.rpc, logger.child('[AliasFetcher]'))
 
 Formatter.aliasCache = aliasFetcher
