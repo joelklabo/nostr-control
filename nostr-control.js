@@ -6,6 +6,7 @@ import Formatter from "./formatter.js";
 import ConfigReader from "./config-reader.js";
 import MessageHandler from "./message-handler.js";
 import FileLogger from "cln-file-logger";
+import AliasFetcher from "./alias-fetcher.js";
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
@@ -253,3 +254,7 @@ await bot.connect()
 
 logger.logInfo('calling start')
 plugin.start()
+
+const aliasFetcher = new AliasFetcher(plugin.rpc)
+
+Formatter.aliasCache = aliasFetcher
