@@ -1,5 +1,5 @@
 class AliasFetcher {
-		constructor(rpc, plugin) {
+		constructor(plugin, logger) {
 				this.aliasCache = {};
 				this.plugin = plugin;
 				this.query = {query: "SELECT DISTINCT pc.short_channel_id, n.alias FROM nodes n JOIN peerchannels pc ON n.nodeid = pc.peer_id JOIN forwards f ON (pc.short_channel_id = f.in_channel OR pc.short_channel_id = f.out_channel)"};
