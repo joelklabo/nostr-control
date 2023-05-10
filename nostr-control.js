@@ -11,18 +11,6 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-const logPath = path.join(__dirname, 'plugin.log')
-
-const configReader = new ConfigReader('config.json')
-const config = configReader.read()
-
-const logger = new FileLogger('[nstrctrl]', logPath) 
-const plugin = new Plugin({ dynamic: true }, logger.child('[plugin]'))
-const bot = new NostrDMBot(config.relay, config.bot_secret, config.your_pubkey, logger.child('[NostrDMBot]'))
-const messageHandler = new MessageHandler()
-
 const allNotifications = [
 	`channel_opened`,
 	`channel_open_failed`,
@@ -50,7 +38,22 @@ const quietedNotifications = [
 	`openchannel_peer_sigs`,
 ]
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+const logPath = path.join(__dirname, 'plugin.log')
+
+const configReader = new ConfigReader('config.json')
+const config = configReader.read()
+
+const logger = new FileLogger('[nstrctrl]', logPath) 
+const plugin = new Plugin({ dynamic: true }, logger.child('[plugin]'))
+const bot = new NostrDMBot(config.relay, config.bot_secret, config.your_pubkey, logger.child('[NostrDMBot]'))
+const messageHandler = new MessageHandler()
+
 let ready = false
+
+logger.logInfo('current config')
+logger.logInfo(config)
 
 // Bot
 

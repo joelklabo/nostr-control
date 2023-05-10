@@ -13,6 +13,8 @@ class AliasFetcher {
 			if (!this.aliasCache.hasOwnProperty(scid)) {
 				this.logger.logInfo(`alias not found for ${scid}`);
 				let aliases = await this._rpc.call("sql", this._query);
+				this.logger.logInfo('aliases query result');
+				this.logger.logInfo(aliases);
 				for (let result of aliases.rows) {
 					this.aliasCache[result[0]] = result[1];
 					this.logger.logInfo('updating alias cache');
