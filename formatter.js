@@ -209,10 +209,10 @@ ${info.log}`;
 	// 	resolved_time: 1682310437.239,
 	// },
 
-	static forward_event(data) {
+	static async forward_event(data) {
 		const info = data.forward_event
-		const in_alias = this.aliasCache.get(info.in_channel)
-		const out_alias = this.aliasCache.get(info.out_channel)
+		const in_alias = await this.aliasCache.get(info.in_channel)
+		const out_alias = await this.aliasCache.get(info.out_channel)
 
 		return `🔀 routed ${info.status == "local_failed" ? "N/A" : MillisatParser.parseInput(info.out_msat, true)} ⚡️ 🔀
 

@@ -230,7 +230,7 @@ allNotifications.forEach((notification) => {
 			return
 		}
 		try {
-			const message = Formatter[notification](data)
+			const message = await Formatter[notification](data)
 			logger.logInfo('publishing message')
 			logger.logInfo(message)
 			checkForUndefined(message, data)
