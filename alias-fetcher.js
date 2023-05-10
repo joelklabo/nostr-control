@@ -15,9 +15,9 @@ class AliasFetcher {
 				this.logger.logInfo(aliases);
 				for (let result of aliases.rows) {
 					this.aliasCache[result[0]] = result[1];
-					this.logger.logInfo('updating alias cache');
-					this.logger.logInfo(this.aliasCache);
 				}
+				this.logger.logInfo('updating alias cache');
+				this.logger.logInfo(this.aliasCache);
 			} else {
 				this.logger.logInfo(`alias (${this.aliasCache[scid]}) found for (${scid})`);
 			}
