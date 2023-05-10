@@ -255,6 +255,6 @@ await bot.connect()
 logger.logInfo('calling start')
 plugin.start()
 
-const aliasFetcher = new AliasFetcher(plugin.rpc)
+const aliasFetcher = new AliasFetcher(plugin.rpc, logger.child('[AliasFetcher]'))
 
 Formatter.aliasCache = aliasFetcher
