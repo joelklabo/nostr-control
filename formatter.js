@@ -47,20 +47,40 @@ GitHub ⭐️: https://github.com/joelklabo/nostr-control`
 	}
 
 	static async channels(channels) {
-		let message = `📊 channel summary 📊
+    const graphLength = 15; // Length of the line graph
 
-`
-		for (let channel of channels) {
-			const alias = await this.aliasCache.get(channel.scid) || channel.scid 
-			message += `
-${alias}
-spendable: ${MillisatParser.parseInput(channel.spendable, true)}
-receivable: ${MillisatParser.parseInput(channel.receivable, true)}
-total: ${MillisatParser.parseInput(channel.total, true)}
-`
-		}
-		return message
-	}
+    let message = `📊 channel summary 📊\n`;
+
+    for (let channel of channels) {
+        const alias = await this.aliasCache.get(channel.scid) || channel.scid;
+
+        const spendable = MillisatParser.parseInput(channel.spendable, true);
+        const receivable = MillisatParser.parseInput(channel.receivable, true);
+        const total = MillisatParser.parseInput(channel.total, true);
+
+        const spendablePercentage = channel.spendable / channel.total;
+        let spendableGraphPosition = Math.round(spendablePercentage * graphLength);
+        
+        // Ensure the vertical line is always present
+        if (spendableGraphPosition === 0) {
+            spendableGraphPosition = 1;
+        } else if (spendableGraphPosition >= graphLength) {
+            spendableGraphPosition = graphLength - 1;
+        }
+
+        let lineGraph = "";
+        for (let i = 0; i < graphLength; i++) {
+            if (i === spendableGraphPosition) {
+                lineGraph += "|";
+            } else {
+                lineGraph += "─";
+            }
+        }
+
+        message += `\n${alias}\nspendable: ${spendable}\nreceivable: ${receivable}\ngraph: ${lineGraph}\ntotal: ${total}\n`;
+    }
+    return message;
+}
 	
 	// RPC
 
