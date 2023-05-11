@@ -77,7 +77,7 @@ GitHub ⭐️: https://github.com/joelklabo/nostr-control`
             }
         }
 
-        message += `\n${alias}\nspendable: ${spendable}\nreceivable: ${receivable}\ngraph: ${lineGraph}\ntotal: ${total}\n`;
+        message += `\n${alias}\n${lineGraph}\ntotal: ${total}\n`;
     }
     return message;
 }
