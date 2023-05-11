@@ -84,7 +84,7 @@ Current commands:
 
 There is an example config in the root directory `example-config.json` it looks like this. Input your information there and nostr-control will pick it up.
 
-```json
+```javascript
 {
   relay: "some_relay",
   bot_secret: "some_secret_key_hex",
