@@ -15,7 +15,7 @@ Planned Features:
 `nostr-control` is a Core Lightning plugin that allows you talk to your node over Nostr DM. It also will send you events from your node over Nostr DMs.
 
 ## Requirements
-Tested with Core Lightning `v23.02.2` and Node 18. `nostr-control` uses the `sql` lightning-cli call so any version that supports that should work.
+Tested with Core Lightning `v23.02.2` and Node 18. `nostr-control` uses the `sql` lightning-cli method so any version that supports that should work.
 
 ## Screenshots
 | Info | Channel Summary| Create Invoice | Pay Invoice | Get Address | See Forwards | New Blocks (etc.) |
