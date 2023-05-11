@@ -119,7 +119,7 @@ GitHub ⭐️: https://github.com/joelklabo/nostr-control`
 
 ${info.alias}
 ID: ${info.id}
-Address: ${info.id}@${addressInfo}
+Address: ${addressInfo}
 Color: ${info.color}
 Peers: ${info.num_peers}
 Active channels: ${info.num_active_channels}
