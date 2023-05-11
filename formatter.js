@@ -55,7 +55,8 @@ GitHub ⭐️: https://github.com/joelklabo/nostr-control`
 			message += `${alias}
 spendable: ${MillisatParser.parseInput(channel.spendable, true)} ⚡️
 receivable: ${MillisatParser.parseInput(channel.receivable, true)} ⚡️
-total: ${MillisatParser.parseInput(channel.total, true)} ⚡️`
+total: ${MillisatParser.parseInput(channel.total, true)} ⚡️
+`
 		}
 		return message
 	}
