@@ -7,7 +7,7 @@ TODO:
 - [x] Disable events
 - [x] Only settled forwards
 - [ ] Routing summary
-- [ ] Channel summary
+- [x] Channel summary
 
 ## Description
 
