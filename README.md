@@ -46,7 +46,7 @@ The events you can receive are:
 
 The most interesting thing about `nostr-control` is that you can communicate with your node. You can respond to it in your DMs and get information about your node. `/help` will give you a list of commands you can use.
 
-Current commands:
+### Available Commands:
 
 - `/help` - Get a list of commands
 - `/info` - Get information about your node
