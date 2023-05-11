@@ -15,6 +15,18 @@ class MillisatParser {
 
     return millisats;
   }
+
+  static formatNumber(number) {
+    const str = number.toString();
+    const firstGroupLength = str.length % 3 || 3;
+    const groups = [str.slice(0, firstGroupLength)];
+
+    for (let i = firstGroupLength; i < str.length; i += 3) {
+      groups.push(str.slice(i, i + 3));
+    }
+
+    return groups.join(",");
+  }
 }
 
 export default MillisatParser;

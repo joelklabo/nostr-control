@@ -49,9 +49,9 @@ GitHub ⭐️: https://github.com/joelklabo/nostr-control`
 	}
 
 	static async funds(funds) {
-		const onChainFunds = MillisatParser.parseInput(funds.chain_msat, true);
-		const channelFunds = MillisatParser.parseInput(funds.channel_msat, true);
-		const totalFunds = MillisatParser.parseInput(funds.chain_msat + funds.channel_msat, true);
+		const onChainFunds = MillisatParser.formatNumber(funds.chain_sat);
+		const channelFunds = MillisatParser.formatNumber(funds.channel_sat);
+		const totalFunds = MillisatParser.formatNumber(funds.chain_sat + funds.channel_sat);
 		return `💰 funds 💰
 
 ⛓️: ${onChainFunds}
