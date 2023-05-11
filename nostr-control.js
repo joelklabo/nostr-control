@@ -7,9 +7,9 @@ import ConfigReader from "./config-reader.js";
 import MessageHandler from "./message-handler.js";
 import FileLogger from "cln-file-logger";
 import AliasFetcher from "./alias-fetcher.js";
+import ChannelSummaryFetcher from "./channel-summary.js";
 import path from 'path';
 import git from 'git-rev-sync';
-import { execSync } from 'child_process';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 
@@ -52,6 +52,7 @@ const plugin = new Plugin({ dynamic: true }, logger.child('[plugin]'))
 const bot = new NostrDMBot(config.relay, config.bot_secret, config.your_pubkey, logger.child('[NostrDMBot]'))
 const messageHandler = new MessageHandler()
 const aliasFetcher = new AliasFetcher(plugin, logger.child('[AliasFetcher]'))
+const channelSummaryFetcher = new ChannelSummaryFetcher(plugin, logger.child('[ChannelSummaryFetcher]'))
 const currentCommitHash = git.long(path.join(__dirname, '.git'))
 logger.logInfo('current commit hash: ' + currentCommitHash)
 
@@ -87,6 +88,14 @@ bot.on('message', async (message) => {
 
 messageHandler.on('help', async () => {
 	const message = Formatter.help()
+	logger.logInfo('publishing message')
+	logger.logInfo(message)
+	await bot.publish(message)
+})
+
+messageHandler.on('channels', async () => {
+	const channels = await channelSummaryFetcher.get()
+	const message = await Formatter.channels(channels)
 	logger.logInfo('publishing message')
 	logger.logInfo(message)
 	await bot.publish(message)

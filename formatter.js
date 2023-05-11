@@ -45,6 +45,20 @@ Follow me on Nostr: npub19a86gzxctwtz68l8zld2u9y2fjvyyj4juyx8m5geylssrmfj27eqs22
 
 GitHub ⭐️: https://github.com/joelklabo/nostr-control`
 	}
+
+	static async channels(channels) {
+		let message = `📊 channel summary 📊
+
+`
+		for (let channel of channels) {
+			const alias = await this.aliasCache.get(channel.scid) || channel.scid 
+			message += `${alias}
+spendable: ${MillisatParser.parseInput(channel.spendable, true)} ⚡️
+receivable: ${MillisatParser.parseInput(channel.receivable, true)} ⚡️
+total: ${MillisatParser.parseInput(channel.total, true)} ⚡️`
+		}
+		return message
+	}
 	
 	// RPC
 
