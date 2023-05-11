@@ -8,6 +8,7 @@ import MessageHandler from "./message-handler.js";
 import FileLogger from "cln-file-logger";
 import AliasFetcher from "./alias-fetcher.js";
 import ChannelSummaryFetcher from "./channel-summary.js";
+import FundsListFetcher from "./list-funds.js";
 import path from 'path';
 import git from 'git-rev-sync';
 import { fileURLToPath } from 'url';
@@ -53,6 +54,7 @@ const bot = new NostrDMBot(config.relay, config.bot_secret, config.your_pubkey, 
 const messageHandler = new MessageHandler()
 const aliasFetcher = new AliasFetcher(plugin, logger.child('[AliasFetcher]'))
 const channelSummaryFetcher = new ChannelSummaryFetcher(plugin, logger.child('[ChannelSummaryFetcher]'))
+const fundsListFetcher = new FundsListFetcher(plugin, logger.child('[FundsListFetcher]'))
 const currentCommitHash = git.long(path.join(__dirname, '.git'))
 logger.logInfo('current commit hash: ' + currentCommitHash)
 
@@ -96,6 +98,14 @@ messageHandler.on('help', async () => {
 messageHandler.on('channels', async () => {
 	const channels = await channelSummaryFetcher.get()
 	const message = await Formatter.channels(channels)
+	logger.logInfo('publishing message')
+	logger.logInfo(message)
+	await bot.publish(message)
+})
+
+messageHandler.on('funds', async () => {
+	const funds = await fundsListFetcher.get()
+	const message = await Formatter.funds(funds)
 	logger.logInfo('publishing message')
 	logger.logInfo(message)
 	await bot.publish(message)

@@ -47,6 +47,18 @@ Follow me on Nostr: npub19a86gzxctwtz68l8zld2u9y2fjvyyj4juyx8m5geylssrmfj27eqs22
 GitHub ⭐️: https://github.com/joelklabo/nostr-control`
 	}
 
+	static async funds(funds) {
+		const onChainFunds = MillisatParser.parseInput(funds.chain_msat, true);
+		const channelFunds = MillisatParser.parseInput(funds.channel_msat, true);
+		const totalFunds = MillisatParser.parseInput(funds.chain_msat + funds.channel_msat, true);
+		return `💰 funds 💰
+
+⛓️: ${onChainFunds}
+🔀: ${channelFunds}
+
+total: ${totalFunds}`
+	}
+
 	static async channels(channels) {
     const graphLength = 15; // Length of the line graph
 
