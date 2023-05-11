@@ -48,6 +48,7 @@ Current commands:
 
 - `/help` - Get a list of commands
 - `/info` - Get information about your node
+- `/channels` - Get information about your channels
 - `/invoice` - Create an invoice (pass amount_sats, label, and description)
 - `/pay` - Pay an invoice (pass bolt11)
 - `/address` - Get a new address (Bech32)
