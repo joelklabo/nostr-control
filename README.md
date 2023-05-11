@@ -51,6 +51,7 @@ The most interesting thing about `nostr-control` is that you can communicate wit
 - `/help` - Get a list of commands
 - `/info` - Get information about your node
 - `/channels` - Get information about your channels
+- `/funds` - Get information about your funds
 - `/invoice` - Create an invoice (pass amount_sats, label, and description)
 - `/pay` - Pay an invoice (pass bolt11)
 - `/address` - Get a new address (Bech32)

@@ -10,6 +10,7 @@ class Formatter {
 /help - show this help
 /info - show node info
 /channels - Get information about your channels
+/funds - Get information about your funds
 /invoice [amount_sats] [label] [description] - create an invoice
 /pay [bolt11] - pay an invoice
 /address - get a new address (Bech32)
