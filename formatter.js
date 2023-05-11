@@ -52,10 +52,11 @@ GitHub ⭐️: https://github.com/joelklabo/nostr-control`
 `
 		for (let channel of channels) {
 			const alias = await this.aliasCache.get(channel.scid) || channel.scid 
-			message += `${alias}
-spendable: ${MillisatParser.parseInput(channel.spendable, true)} ⚡️
-receivable: ${MillisatParser.parseInput(channel.receivable, true)} ⚡️
-total: ${MillisatParser.parseInput(channel.total, true)} ⚡️
+			message += `
+${alias}
+spendable: ${MillisatParser.parseInput(channel.spendable, true)}
+receivable: ${MillisatParser.parseInput(channel.receivable, true)}
+total: ${MillisatParser.parseInput(channel.total, true)}
 `
 		}
 		return message
